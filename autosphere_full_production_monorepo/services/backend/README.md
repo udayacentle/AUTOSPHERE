@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AutoSphere Backend & Web App
 
 ## Run the full web application
@@ -38,3 +39,6 @@ python -m uvicorn app:app --host 127.0.0.1 --port 8000
 |--------------|-------------------|
 | Docker       | http://localhost:3001 |
 | Local node   | http://localhost:3002 |
+=======
+# AUTOSPHERE
+>>>>>>> e8f8ac5c0f54ec9cababbe9e23062a288e4760eb
