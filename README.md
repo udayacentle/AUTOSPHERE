@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # AutoSphere
 
 Driver app and backend for the AutoSphere AI mobility platform.
@@ -21,6 +20,3 @@ node src/server.js
 ```
 
 Open **http://localhost:3002** for the dashboard. With Docker: `docker compose up -d` then **http://localhost:3001**.
-=======
-# AUTOSPHERE
->>>>>>> e8f8ac5c0f54ec9cababbe9e23062a288e4760eb
