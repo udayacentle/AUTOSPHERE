@@ -91,11 +91,43 @@
     .auth-card { background: var(--surface); border-radius: 16px; padding: 28px; max-width: 400px; width: 100%; border: 1px solid var(--border); }
     .auth-card h1 { margin: 0 0 6px; font-size: 1.4rem; color: var(--primary); }
     .auth-card .sub { color: var(--muted); margin-bottom: 20px; font-size: 0.9rem; }
+    .auth-card .field-label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text); }
+    .auth-card .field-label .required { color: var(--danger); margin-left: 2px; }
+    .auth-card .password-wrap { position: relative; margin-bottom: 10px; }
+    .auth-card .password-wrap input { margin-bottom: 0; padding-right: 32px; box-sizing: border-box; }
+    .auth-card .password-toggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; min-width: 24px; min-height: 24px; background: transparent !important; border: none !important; cursor: pointer; padding: 0; color: #80868b; line-height: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 0; outline: none; box-shadow: none; font-weight: normal !important; }
+    .auth-card .password-toggle:hover { color: #5f6368; background: transparent !important; }
+    [data-theme="dark"] .auth-card .password-toggle { color: #bdc1c6; }
+    [data-theme="dark"] .auth-card .password-toggle:hover { color: #e8eaed; }
+    .auth-card .password-toggle:focus { outline: none; box-shadow: none; background: transparent !important; }
+    .auth-card .password-toggle svg { width: 20px; height: 20px; pointer-events: none; }
+    .auth-card .password-toggle .eye-outline { fill: #f1f3f4; stroke: #5f6368; stroke-width: 1.25; }
+    .auth-card .password-toggle .eye-iris { fill: #e8eaed; }
+    .auth-card .password-toggle .eye-pupil { fill: #3c4043; }
+    .auth-card .password-wrap.visible .password-toggle .eye-outline { fill: #666; stroke: #666; }
+    .auth-card .password-wrap.visible .password-toggle .eye-iris { fill: #666; }
+    .auth-card .password-wrap.visible .password-toggle .eye-pupil { fill: #202124; }
+    [data-theme="dark"] .auth-card .password-toggle .eye-outline { fill: #202124; stroke: #9aa0a6; }
+    [data-theme="dark"] .auth-card .password-toggle .eye-iris { fill: #3c4043; }
+    [data-theme="dark"] .auth-card .password-toggle .eye-pupil { fill: #e8eaed; }
+    [data-theme="dark"] .auth-card .password-wrap.visible .password-toggle .eye-outline { fill: #9aa0a6; stroke: #9aa0a6; }
+    [data-theme="dark"] .auth-card .password-wrap.visible .password-toggle .eye-iris { fill: #9aa0a6; }
+    [data-theme="dark"] .auth-card .password-wrap.visible .password-toggle .eye-pupil { fill: #e8eaed; }
+    .auth-card .password-toggle .icon-hide path { fill: currentColor; }
+    .auth-card .password-toggle .icon-show { display: none; }
+    .auth-card .password-toggle .icon-hide { display: inline-flex; }
+    .auth-card .password-wrap.visible .password-toggle .icon-show { display: inline-flex; }
+    .auth-card .password-wrap.visible .password-toggle .icon-hide { display: none; }
     .auth-card input, .auth-card button { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--surface-hover); background: var(--bg); color: var(--text); font-size: 1rem; margin-bottom: 10px; }
-    .auth-card button { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
-    .auth-card button:hover { background: var(--primary-hover); }
+    .auth-card button:not(.password-toggle) { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
+    .auth-card button:not(.password-toggle):hover { background: var(--primary-hover); }
     .auth-card .link { margin-top: 14px; text-align: center; }
     .auth-card .link a { color: var(--primary); font-size: 0.9rem; }
+    .auth-card .btn-google { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+    .auth-card .btn-google:hover { background: var(--surface-hover); }
+    .auth-divider { display: flex; align-items: center; margin: 16px 0; }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .auth-divider span { padding: 0 12px; color: var(--muted); font-size: 0.85rem; }
     .error { color: var(--danger); font-size: 0.85rem; margin-top: 6px; }
 
     /* App shell: sidebar + content */
@@ -217,8 +249,8 @@
       <button type="button" class="logout-icon-btn" id="topLogoutBtn" title="Logout" aria-label="Logout">⏻</button>
     </div>
   <div id="app">
-    <!-- 1. AUTHENTICATION: Splash (per Screen Inventory) -->
-    <div id="view-splash" class="splash-wrap" style="cursor:pointer" title="Tap to continue">
+    <!-- 1. AUTHENTICATION: Splash (per Screen Inventory) - hidden by default; login shown on load -->
+    <div id="view-splash" class="splash-wrap hidden" style="cursor:pointer" title="Tap to continue">
       <div class="logo">AutoSphere AI</div>
       <div class="tagline">Intelligent Automotive Ecosystem · Driver Mobile Application</div>
       <div class="tagline" style="margin-top:12px;font-size:0.8rem;opacity:0.8">Complete Screen Inventory · Feb 2026</div>
@@ -228,11 +260,21 @@
     <div id="view-login" class="auth-wrap hidden">
       <div class="auth-card">
         <h1>Login</h1>
-        <p class="sub">Sign in to your Driver account.</p>
-        <input type="email" id="email" placeholder="Email" value="driver@autosphere.demo" autocomplete="off" />
-        <input type="password" id="password" placeholder="Password" value="demo" />
+        <p class="sub">Sign in to your Driver account. Fields marked with <span class="required">*</span> are required.</p>
+        <label class="field-label" for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" placeholder="Email" autocomplete="email" required />
+        <label class="field-label" for="password">Password <span class="required">*</span></label>
+        <div class="password-wrap" id="passwordWrapLogin">
+          <input type="password" id="password" placeholder="Password" required />
+          <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
+        </div>
         <p id="loginError" class="error hidden"></p>
         <button type="button" id="loginBtn">Sign in</button>
+        <div class="auth-divider"><span>or</span></div>
+        <button type="button" class="btn-google" id="loginGoogleBtn" title="Continue with Google">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
         <div class="link"><a href="#" id="goSignup">Create account (Signup)</a></div>
       </div>
     </div>
@@ -241,11 +283,28 @@
     <div id="view-signup" class="auth-wrap hidden">
       <div class="auth-card">
         <h1>Signup</h1>
-        <p class="sub">Create your Driver account.</p>
-        <input type="text" id="signupName" placeholder="Full name" />
-        <input type="email" id="signupEmail" placeholder="Email" />
-        <input type="password" id="signupPassword" placeholder="Password" />
+        <p class="sub">Create your Driver account. Fields marked with <span class="required">*</span> are required.</p>
+        <label class="field-label" for="signupName">Full name <span class="required">*</span></label>
+        <input type="text" id="signupName" placeholder="Full name" required />
+        <label class="field-label" for="signupEmail">Email <span class="required">*</span></label>
+        <input type="email" id="signupEmail" placeholder="Email" autocomplete="email" required />
+        <label class="field-label" for="signupPassword">Password <span class="required">*</span></label>
+        <div class="password-wrap" id="passwordWrapSignup">
+          <input type="password" id="signupPassword" placeholder="Password" required />
+          <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
+        </div>
+        <label class="field-label" for="signupPasswordRetype">Retype password <span class="required">*</span></label>
+        <div class="password-wrap" id="passwordWrapSignupRetype">
+          <input type="password" id="signupPasswordRetype" placeholder="Retype password" required />
+          <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
+        </div>
+        <p id="signupError" class="error hidden"></p>
         <button type="button" id="signupBtn">Create account</button>
+        <div class="auth-divider"><span>or</span></div>
+        <button type="button" class="btn-google" id="signupGoogleBtn" title="Continue with Google">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
         <div class="link"><a href="#" id="goLogin">Already have an account? Login</a></div>
       </div>
     </div>
@@ -540,8 +599,14 @@
       const v = document.getElementById('view-' + id);
       if (v) v.classList.remove('hidden');
       var topBar = document.querySelector('.top-right-actions');
-      if (topBar) topBar.style.display = (id === 'app') ? 'flex' : 'none';
+      if (topBar) topBar.style.display = 'flex';
+      var logoutBtn = document.getElementById('topLogoutBtn');
+      if (logoutBtn) logoutBtn.style.display = (id === 'app') ? '' : 'none';
     }
+    (function setInitialTopBar() {
+      var lb = document.getElementById('topLogoutBtn');
+      if (lb) lb.style.display = 'none';
+    })();
     function showPanel(id) {
       document.querySelectorAll('.screen-panel').forEach(p => { p.classList.remove('active'); });
       document.querySelectorAll('.sidebar .nav-item').forEach(n => { n.classList.remove('active'); });
@@ -557,13 +622,36 @@
       hide(document.getElementById('view-splash'));
     }
     document.getElementById('view-splash').onclick = goFromSplash;
-    setTimeout(function() { if (document.getElementById('view-splash') && !document.getElementById('view-splash').classList.contains('hidden')) goFromSplash(); }, 2500);
 
-    // If already logged in, skip splash and go to app
-    if (localStorage.getItem('autosphere_token')) {
+    // Handle Google callback: ?token=... or ?google_error=... or ?google=unavailable
+    var params = new URLSearchParams(window.location.search);
+    var tokenFromUrl = params.get('token');
+    if (tokenFromUrl) {
+      localStorage.setItem('autosphere_token', tokenFromUrl);
+      localStorage.setItem('autosphere_email', 'google-user@autosphere.demo');
+      history.replaceState({}, '', window.location.pathname || '/');
       hide(document.getElementById('view-splash'));
       showView('app');
       initApp();
+    } else {
+      var googleErr = params.get('google_error');
+      var googleUnavail = params.get('google');
+      if (googleErr || googleUnavail) {
+        history.replaceState({}, '', window.location.pathname || '/');
+        hide(document.getElementById('view-splash'));
+        showView('login');
+        if (document.getElementById('loginError')) {
+          document.getElementById('loginError').textContent = googleUnavail === 'unavailable' ? 'Google sign-in is not configured.' : ('Google sign-in failed: ' + (googleErr || googleUnavail));
+          document.getElementById('loginError').classList.remove('hidden');
+        }
+      }
+    }
+    if (!tokenFromUrl && localStorage.getItem('autosphere_token')) {
+      hide(document.getElementById('view-splash'));
+      showView('app');
+      initApp();
+    } else if (!tokenFromUrl && !params.get('google_error') && !params.get('google')) {
+      goFromSplash();
     }
 
     document.getElementById('goSignup').onclick = function(e) { e.preventDefault(); showView('signup'); hide(document.getElementById('view-login')); };
@@ -571,16 +659,79 @@
     document.getElementById('goLoginFromOtp').onclick = function(e) { e.preventDefault(); showView('login'); hide(document.getElementById('view-otp')); };
     document.getElementById('skipBiometric').onclick = function(e) { e.preventDefault(); showView('app'); hide(document.getElementById('view-biometric')); initApp(); };
     document.getElementById('biometricBtn').onclick = function() { showView('app'); hide(document.getElementById('view-biometric')); initApp(); };
-    document.getElementById('signupBtn').onclick = function() { showView('otp'); hide(document.getElementById('view-signup')); };
+    document.getElementById('signupBtn').onclick = function() {
+      var name = document.getElementById('signupName').value.trim();
+      var email = document.getElementById('signupEmail').value.trim();
+      var pwd = document.getElementById('signupPassword').value;
+      var retype = document.getElementById('signupPasswordRetype').value;
+      var errEl = document.getElementById('signupError');
+      hide(errEl);
+      if (!name) { errEl.textContent = 'Enter full name.'; errEl.classList.remove('hidden'); return; }
+      if (!email) { errEl.textContent = 'Enter email.'; errEl.classList.remove('hidden'); return; }
+      if (!pwd) { errEl.textContent = 'Enter password.'; errEl.classList.remove('hidden'); return; }
+      if (!retype) { errEl.textContent = 'Retype password.'; errEl.classList.remove('hidden'); return; }
+      if (pwd !== retype) {
+        errEl.textContent = 'Passwords do not match.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      showView('otp');
+      hide(document.getElementById('view-signup'));
+    };
     document.getElementById('otpVerifyBtn').onclick = function() { showView('login'); hide(document.getElementById('view-otp')); };
 
+    function continueWithGoogle() {
+      window.location.href = (window.API || '') + '/auth/google';
+    }
+    document.getElementById('loginGoogleBtn').onclick = continueWithGoogle;
+    document.getElementById('signupGoogleBtn').onclick = continueWithGoogle;
+
+    function initPasswordToggles() {
+      document.querySelectorAll('.password-wrap').forEach(function(wrap) {
+        var input = wrap.querySelector('input');
+        var btn = wrap.querySelector('.password-toggle');
+        if (!input || !btn) return;
+        btn.onclick = function() {
+          var isPass = input.type === 'password';
+          input.type = isPass ? 'text' : 'password';
+          wrap.classList.toggle('visible', isPass);
+          btn.setAttribute('aria-label', isPass ? 'Hide password' : 'Show password');
+          btn.setAttribute('title', isPass ? 'Hide password' : 'Show password');
+        };
+      });
+    }
+    initPasswordToggles();
+
+    document.getElementById('email').onkeydown = function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById('password').focus();
+        return false;
+      }
+    };
+    document.getElementById('email').onkeypress = function(e) {
+      if (e.key === 'Enter' || e.which === 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+    document.getElementById('password').onkeydown = function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('loginBtn').click();
+      }
+    };
     document.getElementById('loginBtn').onclick = async function() {
       const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
       const err = document.getElementById('loginError');
       hide(err);
       if (!email) { err.textContent = 'Enter email.'; show(err); return; }
+      if (!password) { err.textContent = 'Enter password.'; show(err); return; }
       try {
-        const r = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: document.getElementById('password').value }) });
+        const r = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
         const text = await r.text();
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}

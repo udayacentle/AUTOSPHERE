@@ -31,6 +31,31 @@ app.post('/auth/login', (req, res) => {
   res.json({ token });
 });
 
+// Google OAuth: redirect to Google sign-in (configure GOOGLE_CLIENT_ID and BASE_URL to enable)
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3002';
+app.get('/auth/google', (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    return res.redirect(302, '/?google=unavailable');
+  }
+  const redirectUri = `${BASE_URL.replace(/\/$/, '')}/auth/google/callback`;
+  const scope = encodeURIComponent('openid email profile');
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`;
+  res.redirect(302, url);
+});
+app.get('/auth/google/callback', (req, res) => {
+  const { code, error } = req.query;
+  if (error) {
+    return res.redirect(302, '/?google_error=' + encodeURIComponent(error));
+  }
+  if (!code) {
+    return res.redirect(302, '/');
+  }
+  // In production: exchange code for tokens, create/fetch user, set session or return JWT
+  const token = jwt.sign({ email: 'google-user@autosphere.demo', provider: 'google' }, SECRET, { expiresIn: '1h' });
+  res.redirect(302, '/?token=' + token);
+});
+
 // Vehicle + VII (Vehicle Intelligence Index): health, risk, compliance, market (BRD §4)
 app.get('/vehicles/1', (req, res) => {
   res.json({
