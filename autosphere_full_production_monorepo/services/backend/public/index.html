@@ -3,292 +3,696 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AutoSphere AI – Driver Dashboard</title>
+  <title>AutoSphere AI – Driver Mobile Application</title>
   <style>
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-      min-height: 100vh;
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #0ea5e9;
+      --primary-hover: #0284c7;
+      --success: #22c55e;
+      --warn: #eab308;
+      --danger: #ef4444;
     }
-    .container { max-width: 640px; margin: 0 auto; padding: 24px; }
-
-    /* Login */
-    .login-wrap {
-      min-height: 100vh;
+    [data-theme="light"] {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-hover: #e2e8f0;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --success: #16a34a;
+      --warn: #ca8a04;
+      --danger: #dc2626;
+    }
+    .top-right-actions {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .theme-icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      font-size: 1.35rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
     }
-    .login-card {
-      background: #1e293b;
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #334155;
-    }
-    .login-card h1 { margin: 0 0 8px; font-size: 1.75rem; color: #38bdf8; }
-    .login-card .sub { color: #94a3b8; margin-bottom: 24px; font-size: 0.95rem; }
-    .login-card input, .login-card button {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid #475569;
-      background: #0f172a;
-      color: #e2e8f0;
-      font-size: 1rem;
-      margin-bottom: 12px;
-    }
-    .login-card button {
-      background: #0ea5e9;
-      color: #fff;
-      border: none;
+    .theme-icon-btn:hover { background: var(--surface-hover); transform: scale(1.05); }
+    .theme-icon-btn:active { transform: scale(0.98); }
+    [data-theme="light"] .theme-icon-btn { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .logout-icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       cursor: pointer;
-      font-weight: 600;
-      margin-top: 8px;
-      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-family: inherit;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
     }
-    .login-card button:hover { background: #0284c7; }
-    .error { color: #f87171; font-size: 0.9rem; margin-top: 8px; }
+    .logout-icon-btn:hover { background: var(--surface-hover); transform: scale(1.05); }
+    .logout-icon-btn:active { transform: scale(0.98); }
+    [data-theme="light"] .logout-icon-btn { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     .hidden { display: none !important; }
 
-    /* Dashboard */
-    .dashboard { padding-bottom: 48px; }
-    .header {
+    /* Splash */
+    .splash-wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    .splash-wrap .logo { font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .splash-wrap .tagline { color: var(--muted); font-size: 0.95rem; }
+
+    /* Auth screens */
+    .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .auth-card { background: var(--surface); border-radius: 16px; padding: 28px; max-width: 400px; width: 100%; border: 1px solid var(--border); }
+    .auth-card h1 { margin: 0 0 6px; font-size: 1.4rem; color: var(--primary); }
+    .auth-card .sub { color: var(--muted); margin-bottom: 20px; font-size: 0.9rem; }
+    .auth-card input, .auth-card button { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--surface-hover); background: var(--bg); color: var(--text); font-size: 1rem; margin-bottom: 10px; }
+    .auth-card button { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
+    .auth-card button:hover { background: var(--primary-hover); }
+    .auth-card .link { margin-top: 14px; text-align: center; }
+    .auth-card .link a { color: var(--primary); font-size: 0.9rem; }
+    .error { color: var(--danger); font-size: 0.85rem; margin-top: 6px; }
+
+    /* App shell: sidebar + content */
+    .app-shell { display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); padding: 12px 0; flex-shrink: 0; }
+    .sidebar .logo { font-size: 1.1rem; font-weight: 700; color: var(--primary); padding: 0 16px 12px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .sidebar .user { font-size: 0.75rem; color: var(--muted); padding: 0 16px 8px; }
+    .sidebar nav { max-height: calc(100vh - 120px); overflow-y: auto; }
+    .sidebar .nav-group { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 16px 4px; }
+    .sidebar .nav-item { display: block; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 0.85rem; border-radius: 6px; margin: 2px 8px; }
+    .sidebar .nav-item:hover { background: var(--surface-hover); }
+    .sidebar .nav-item.active { background: var(--primary); color: #fff; }
+    .sidebar .btn-logout { margin: 12px 16px 0; padding: 8px 12px; width: calc(100% - 32px); background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+    .sidebar .btn-logout:hover { background: var(--surface-hover); color: var(--text); }
+    @media (max-width: 768px) {
+      .sidebar { width: 56px; padding: 8px 0; }
+      .sidebar .logo, .sidebar .user, .sidebar .nav-group, .sidebar .nav-item span { display: none; }
+      .sidebar .nav-item { padding: 10px; text-align: center; }
+    }
+
+    .main-content { flex: 1; padding: 20px; overflow-y: auto; }
+    .screen-panel { display: none; }
+    .screen-panel.active { display: block; }
+    .screen-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+    .card { background: var(--surface); border-radius: 14px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .card-title { font-size: 0.7rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; }
+    .kpi-value { font-size: 1.4rem; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+    .kpi-value.primary { color: var(--primary); }
+    .kpi-label { color: var(--muted); font-size: 0.8rem; margin: 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+    .score-ring { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(var(--primary) calc(var(--pct) * 3.6deg), var(--surface-hover) 0); display: flex; align-items: center; justify-content: center; }
+    .score-ring-inner { width: 78px; height: 78px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+    .health-bar-wrap { height: 6px; background: var(--surface-hover); border-radius: 3px; overflow: hidden; margin: 8px 0; }
+    .health-bar { height: 100%; border-radius: 3px; background: var(--success); }
+    .health-bar.warn { background: var(--warn); }
+    .health-bar.danger { background: var(--danger); }
+    .vii-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+    .vii-item { text-align: center; padding: 8px; background: var(--bg); border-radius: 6px; font-size: 0.85rem; }
+    .vii-item .v { font-weight: 700; color: var(--primary); }
+    .alert-list { list-style: none; padding: 0; margin: 0; }
+    .alert-list li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .alert-list li:last-child { border-bottom: none; }
+    .activity-list { list-style: none; padding: 0; margin: 0; }
+    .activity-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .activity-list .time { color: var(--muted); font-size: 0.75rem; }
+    .card input, .card button { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--surface-hover); background: var(--bg); color: var(--text); font-size: 0.95rem; margin-bottom: 8px; }
+    .card button { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
+    .card button:hover { background: var(--primary-hover); }
+    .placeholder { padding: 24px; background: var(--bg); border-radius: 10px; border: 1px dashed var(--border); color: var(--muted); text-align: center; font-size: 0.9rem; }
+    .footer-app { text-align: center; color: var(--muted); font-size: 0.7rem; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+    /* Home Dashboard – enhanced layout */
+    .home-dash { max-width: 900px; }
+    .home-welcome {
+      background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(14, 165, 233, 0.25);
+    }
+    .home-welcome h2 { margin: 0 0 6px; font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .home-welcome p { margin: 0; font-size: 0.95rem; opacity: 0.95; }
+    .home-kpi-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; }
+    @media (max-width: 560px) { .home-kpi-row { grid-template-columns: 1fr; } }
+    .home-kpi-card {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .home-kpi-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    [data-theme="dark"] .home-kpi-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .home-kpi-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0.08) 100%);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .home-kpi-body { flex: 1; min-width: 0; }
+    .home-kpi-body .label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 6px; }
+    .home-kpi-body .value { font-size: 2rem; font-weight: 700; color: var(--primary); margin: 0 0 4px; line-height: 1.2; }
+    .home-kpi-body .sublabel { font-size: 0.85rem; color: var(--muted); margin: 0; }
+    .home-activity-card {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+    .home-activity-card .card-head { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .home-activity-list { list-style: none; padding: 0; margin: 0; }
+    .home-activity-list li {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #334155;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
     }
-    .header h1 { margin: 0; font-size: 1.35rem; color: #38bdf8; }
-    .header .user { color: #94a3b8; font-size: 0.9rem; }
-    .btn-logout {
-      background: transparent;
-      color: #94a3b8;
-      border: 1px solid #475569;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .btn-logout:hover { background: #334155; color: #e2e8f0; }
-
-    .welcome {
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-      border: 1px solid #334155;
-    }
-    .welcome h2 { margin: 0 0 4px; font-size: 1.1rem; color: #e2e8f0; }
-    .welcome p { margin: 0; color: #94a3b8; font-size: 0.9rem; }
-
-    .card {
-      background: #1e293b;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 1px solid #334155;
-    }
-    .card-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin: 0 0 12px;
-    }
-    .score-big {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #38bdf8;
-      margin: 0 0 4px;
-    }
-    .score-label { color: #64748b; font-size: 0.9rem; margin: 0; }
-    .card input, .card button {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid #475569;
-      background: #0f172a;
-      color: #e2e8f0;
-      font-size: 1rem;
-      margin-bottom: 10px;
-    }
-    .card button {
-      background: #0ea5e9;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      margin-bottom: 0;
-    }
-    .card button:hover { background: #0284c7; }
-    .card .hint { color: #64748b; font-size: 0.85rem; margin: 0 0 12px; }
-    .risk-result { font-size: 1.25rem; font-weight: 600; color: #38bdf8; margin-top: 12px; }
-    .footer { text-align: center; color: #64748b; font-size: 0.8rem; margin-top: 32px; }
+    .home-activity-list li:last-child { border-bottom: none; }
+    .home-activity-list li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); opacity: 0.6; margin-right: 14px; flex-shrink: 0; }
+    .home-activity-list .time { font-size: 0.8rem; color: var(--muted); }
   </style>
 </head>
 <body>
+  <div class="top-right-actions">
+      <button type="button" class="theme-icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"><span id="themeIcon" aria-hidden="true">🌙</span></button>
+      <button type="button" class="logout-icon-btn" id="topLogoutBtn" title="Logout" aria-label="Logout">⏻</button>
+    </div>
   <div id="app">
-    <!-- Login -->
-    <div id="loginView" class="login-wrap">
-      <div class="login-card">
-        <h1>AutoSphere AI</h1>
-        <p class="sub">Sign in to access your driver dashboard.</p>
-        <input type="email" id="email" placeholder="Email" value="driver@autosphere.demo" autocomplete="email" />
-        <input type="password" id="password" placeholder="Password" value="demo" autocomplete="current-password" />
+    <!-- 1. AUTHENTICATION: Splash (per Screen Inventory) -->
+    <div id="view-splash" class="splash-wrap" style="cursor:pointer" title="Tap to continue">
+      <div class="logo">AutoSphere AI</div>
+      <div class="tagline">Intelligent Automotive Ecosystem · Driver Mobile Application</div>
+      <div class="tagline" style="margin-top:12px;font-size:0.8rem;opacity:0.8">Complete Screen Inventory · Feb 2026</div>
+    </div>
+
+    <!-- Authentication: Login -->
+    <div id="view-login" class="auth-wrap hidden">
+      <div class="auth-card">
+        <h1>Login</h1>
+        <p class="sub">Sign in to your Driver account.</p>
+        <input type="email" id="email" placeholder="Email" value="driver@autosphere.demo" autocomplete="off" />
+        <input type="password" id="password" placeholder="Password" value="demo" />
         <p id="loginError" class="error hidden"></p>
         <button type="button" id="loginBtn">Sign in</button>
+        <div class="link"><a href="#" id="goSignup">Create account (Signup)</a></div>
       </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboardView" class="hidden">
-      <div class="container dashboard">
-        <header class="header">
-          <div>
-            <h1>AutoSphere AI</h1>
-            <p class="user" id="userEmail">Dashboard</p>
-          </div>
-          <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
-        </header>
-
-        <section class="welcome">
-          <h2>Welcome back</h2>
-          <p id="welcomeEmail">View your mobility score and AI risk below.</p>
-        </section>
-
-        <section class="card">
-          <h3 class="card-title">Mobility Score</h3>
-          <p id="mobilityScore" class="score-big">—</p>
-          <p class="score-label">Out of 1000 · Vehicle #1</p>
-        </section>
-
-        <section class="card">
-          <h3 class="card-title">AI Risk Prediction</h3>
-          <p class="hint">Enter comma-separated feature values (e.g. 0.1, 0.2, 0.3) and calculate risk score.</p>
-          <input type="text" id="riskFeatures" placeholder="0.1, 0.2, 0.3, 0.4, 0.5" value="0.1, 0.2, 0.3" />
-          <button type="button" id="calcRiskBtn">Calculate risk</button>
-          <p id="riskResult" class="risk-result hidden"></p>
-          <p id="riskError" class="error hidden"></p>
-        </section>
-
-        <p class="footer">AutoSphere AI · Driver Dashboard</p>
+    <!-- Authentication: Signup -->
+    <div id="view-signup" class="auth-wrap hidden">
+      <div class="auth-card">
+        <h1>Signup</h1>
+        <p class="sub">Create your Driver account.</p>
+        <input type="text" id="signupName" placeholder="Full name" />
+        <input type="email" id="signupEmail" placeholder="Email" />
+        <input type="password" id="signupPassword" placeholder="Password" />
+        <button type="button" id="signupBtn">Create account</button>
+        <div class="link"><a href="#" id="goLogin">Already have an account? Login</a></div>
       </div>
+    </div>
+
+    <!-- Authentication: OTP -->
+    <div id="view-otp" class="auth-wrap hidden">
+      <div class="auth-card">
+        <h1>OTP Verification</h1>
+        <p class="sub">Enter the code sent to your email.</p>
+        <input type="text" id="otpCode" placeholder="6-digit code" maxlength="6" />
+        <button type="button" id="otpVerifyBtn">Verify</button>
+        <div class="link"><a href="#" id="goLoginFromOtp">Back to Login</a></div>
+      </div>
+    </div>
+
+    <!-- Authentication: Biometric Setup -->
+    <div id="view-biometric" class="auth-wrap hidden">
+      <div class="auth-card">
+        <h1>Biometric Setup</h1>
+        <p class="sub">Enable fingerprint or face unlock for quick access.</p>
+        <div class="placeholder">Biometric enrollment · Per Screen Inventory</div>
+        <button type="button" id="biometricBtn">Enable biometric</button>
+        <div class="link"><a href="#" id="skipBiometric">Skip for now</a></div>
+      </div>
+    </div>
+
+    <!-- App shell: Sidebar + Main (after login) -->
+    <div id="view-app" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="logo">AutoSphere AI</div>
+        <div class="user" id="userEmail">Driver</div>
+        <nav>
+          <div class="nav-group">Driver Mobile Application</div>
+          <a href="#" class="nav-item active" data-screen="home"><span>Home Dashboard</span></a>
+          <a href="#" class="nav-item" data-screen="onboarding"><span>Onboarding & Profile Setup</span></a>
+          <a href="#" class="nav-item" data-screen="mobilityScore"><span>Mobility Score (VII)</span></a>
+          <a href="#" class="nav-item" data-screen="drivingReports"><span>Driving Reports</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleDetails"><span>Vehicle Details & Digital Twin</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleHealth"><span>Vehicle Health Breakdown</span></a>
+          <a href="#" class="nav-item" data-screen="serviceHistory"><span>Service History Timeline</span></a>
+          <a href="#" class="nav-item" data-screen="predictiveMaintenance"><span>Predictive Maintenance Alerts</span></a>
+          <a href="#" class="nav-item" data-screen="drivingAnalytics"><span>Driving Analytics & Risk</span></a>
+          <a href="#" class="nav-item" data-screen="tripHistory"><span>Trip History & Summary</span></a>
+          <a href="#" class="nav-item" data-screen="fuelCarbon"><span>Fuel Efficiency & Carbon</span></a>
+          <a href="#" class="nav-item" data-screen="insuranceOverview"><span>Insurance Overview & Premium</span></a>
+          <a href="#" class="nav-item" data-screen="claimsUpload"><span>Claims Upload & AI Damage</span></a>
+          <a href="#" class="nav-item" data-screen="claimStatus"><span>Claim Status Tracker</span></a>
+          <a href="#" class="nav-item" data-screen="nearbyServices"><span>Nearby Service Centers & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="technicianProfile"><span>Technician Profile View</span></a>
+          <a href="#" class="nav-item" data-screen="liveRepair"><span>Live Repair Tracking</span></a>
+          <a href="#" class="nav-item" data-screen="parking"><span>Parking Map & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="evCharging"><span>EV Charging & Usage</span></a>
+          <a href="#" class="nav-item" data-screen="emergency"><span>Emergency & Accident Detection</span></a>
+          <a href="#" class="nav-item" data-screen="roadside"><span>Roadside Assistance</span></a>
+          <a href="#" class="nav-item" data-screen="resale"><span>Resale Value Estimator</span></a>
+          <a href="#" class="nav-item" data-screen="loanCalculator"><span>Loan & EMI Calculator</span></a>
+          <a href="#" class="nav-item" data-screen="marketplace"><span>Marketplace</span></a>
+          <a href="#" class="nav-item" data-screen="settings"><span>Settings & Privacy</span></a>
+        </nav>
+        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+      </aside>
+      <main class="main-content">
+        <!-- Home Dashboard -->
+        <div id="panel-home" class="screen-panel active">
+          <div class="home-dash">
+            <div class="home-welcome">
+              <h2>Welcome back</h2>
+              <p>Your mobility overview and quick snapshot.</p>
+            </div>
+            <div class="home-kpi-row">
+              <div class="home-kpi-card">
+                <div class="home-kpi-icon" aria-hidden="true">📊</div>
+                <div class="home-kpi-body">
+                  <p class="label">Vehicle Intelligence Index (VII)</p>
+                  <p id="homeScore" class="value">—</p>
+                  <p class="sublabel">Mobility score · Out of 1000</p>
+                </div>
+              </div>
+              <div class="home-kpi-card">
+                <div class="home-kpi-icon" aria-hidden="true">🔧</div>
+                <div class="home-kpi-body">
+                  <p class="label">Vehicle Health</p>
+                  <p id="homeHealth" class="value">—</p>
+                  <p class="sublabel">Digital twin status</p>
+                </div>
+              </div>
+            </div>
+            <div class="home-activity-card">
+              <p class="card-head">Recent Activity</p>
+              <ul class="home-activity-list" id="homeActivity"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobility Score (VII) -->
+        <div id="panel-mobilityScore" class="screen-panel">
+          <h2 class="screen-title">Mobility Score (Vehicle Intelligence Index)</h2>
+          <div class="card" style="text-align:center;padding:24px">
+            <div class="score-ring" id="scoreRing" style="--pct:0;margin:0 auto 12px"><div class="score-ring-inner"><span id="mobilityScoreVal">—</span></div></div>
+            <p class="kpi-label">Out of 1000</p>
+          </div>
+        </div>
+
+        <!-- Onboarding & Profile Setup -->
+        <div id="panel-onboarding" class="screen-panel">
+          <h2 class="screen-title">Onboarding & Profile Setup</h2>
+          <div class="placeholder">Onboarding and profile setup · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Driving Reports -->
+        <div id="panel-drivingReports" class="screen-panel">
+          <h2 class="screen-title">Driving Reports (Weekly/Monthly)</h2>
+          <div class="placeholder">Weekly and monthly driving reports · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Vehicle Details & Digital Twin View -->
+        <div id="panel-vehicleDetails" class="screen-panel">
+          <h2 class="screen-title">Vehicle Details & Digital Twin View</h2>
+          <div class="card">
+            <p class="card-title">Digital Twin</p>
+            <p id="vehicleName" class="kpi-value" style="font-size:1rem">—</p>
+            <div class="health-bar-wrap"><div class="health-bar" id="healthBar" style="width:0%"></div></div>
+            <p class="kpi-label"><span id="healthPercent">—</span>% · <span id="vehicleStatus">—</span> · Last service: <span id="lastService">—</span></p>
+          </div>
+        </div>
+
+        <!-- Vehicle Health Breakdown -->
+        <div id="panel-vehicleHealth" class="screen-panel">
+          <h2 class="screen-title">Vehicle Health Breakdown</h2>
+          <div class="card">
+            <p class="card-title">VII Breakdown</p>
+            <div class="vii-grid" id="viiGrid"></div>
+          </div>
+        </div>
+
+        <!-- Service History Timeline -->
+        <div id="panel-serviceHistory" class="screen-panel">
+          <h2 class="screen-title">Service History Timeline</h2>
+          <div class="placeholder">Service history timeline · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Predictive Maintenance Alerts -->
+        <div id="panel-predictiveMaintenance" class="screen-panel">
+          <h2 class="screen-title">Predictive Maintenance Alerts</h2>
+          <div class="card">
+            <ul class="alert-list" id="maintenanceAlerts"></ul>
+          </div>
+        </div>
+
+        <!-- Driving Analytics & Risk Exposure -->
+        <div id="panel-drivingAnalytics" class="screen-panel">
+          <h2 class="screen-title">Driving Analytics & Risk Exposure</h2>
+          <div class="placeholder">Driving analytics and risk exposure · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Trip History & Trip Summary -->
+        <div id="panel-tripHistory" class="screen-panel">
+          <h2 class="screen-title">Trip History & Trip Summary</h2>
+          <div class="placeholder">Trip history and trip summary · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Fuel Efficiency & Carbon Tracker -->
+        <div id="panel-fuelCarbon" class="screen-panel">
+          <h2 class="screen-title">Fuel Efficiency & Carbon Tracker</h2>
+          <div class="placeholder">Fuel efficiency and carbon tracker · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Insurance Overview & Premium Calculator -->
+        <div id="panel-insuranceOverview" class="screen-panel">
+          <h2 class="screen-title">Insurance Overview & Premium Calculator</h2>
+          <div class="card">
+            <p class="card-title">Dynamic risk scoring</p>
+            <p class="kpi-label">Enter feature values (comma-separated) for risk score.</p>
+            <input type="text" id="riskFeatures" placeholder="0.1, 0.2, 0.3" value="0.1, 0.2, 0.3" />
+            <button type="button" id="calcRiskBtn">Calculate risk score</button>
+            <p id="riskResult" class="kpi-value primary hidden" style="font-size:1.1rem;margin-top:10px"></p>
+            <p id="riskError" class="error hidden"></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Insurance forecast</p>
+            <p class="kpi-label">Estimated premium change: <strong id="insuranceForecast">—</strong> · Risk: <span id="riskLevel">—</span></p>
+          </div>
+        </div>
+
+        <!-- Claims Upload & AI Damage Assessment -->
+        <div id="panel-claimsUpload" class="screen-panel">
+          <h2 class="screen-title">Claims Upload & AI Damage Assessment</h2>
+          <div class="placeholder">Upload claim documents and AI damage assessment · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Claim Status Tracker -->
+        <div id="panel-claimStatus" class="screen-panel">
+          <h2 class="screen-title">Claim Status Tracker</h2>
+          <div class="placeholder">Track claim status · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Nearby Service Centers & Booking -->
+        <div id="panel-nearbyServices" class="screen-panel">
+          <h2 class="screen-title">Nearby Service Centers & Booking</h2>
+          <div class="placeholder">Find and book nearby service centers · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Technician Profile View -->
+        <div id="panel-technicianProfile" class="screen-panel">
+          <h2 class="screen-title">Technician Profile View</h2>
+          <div class="placeholder">Technician profile and ratings · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Live Repair Tracking -->
+        <div id="panel-liveRepair" class="screen-panel">
+          <h2 class="screen-title">Live Repair Tracking</h2>
+          <div class="placeholder">Live repair tracking · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Parking Map & Booking -->
+        <div id="panel-parking" class="screen-panel">
+          <h2 class="screen-title">Parking Map & Booking</h2>
+          <div class="placeholder">Parking map and booking · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- EV Charging Booking & Usage Analytics -->
+        <div id="panel-evCharging" class="screen-panel">
+          <h2 class="screen-title">EV Charging Booking & Usage Analytics</h2>
+          <div class="placeholder">EV charging booking and usage analytics · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Emergency & Accident Detection -->
+        <div id="panel-emergency" class="screen-panel">
+          <h2 class="screen-title">Emergency & Accident Detection</h2>
+          <div class="placeholder">Emergency and accident detection · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Roadside Assistance -->
+        <div id="panel-roadside" class="screen-panel">
+          <h2 class="screen-title">Roadside Assistance</h2>
+          <div class="placeholder">Roadside assistance · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Resale Value Estimator -->
+        <div id="panel-resale" class="screen-panel">
+          <h2 class="screen-title">Resale Value Estimator</h2>
+          <div class="card">
+            <p class="card-title">Estimated resale value</p>
+            <p id="resaleValue" class="kpi-value primary">—</p>
+            <p class="kpi-label">Trend: <span id="resaleTrend">—</span></p>
+          </div>
+        </div>
+
+        <!-- Loan & EMI Calculator -->
+        <div id="panel-loanCalculator" class="screen-panel">
+          <h2 class="screen-title">Loan & EMI Calculator</h2>
+          <div class="placeholder">Loan and EMI calculator · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Marketplace -->
+        <div id="panel-marketplace" class="screen-panel">
+          <h2 class="screen-title">Marketplace</h2>
+          <div class="placeholder">Marketplace · Per Complete Screen Inventory</div>
+        </div>
+
+        <!-- Settings & Privacy Controls -->
+        <div id="panel-settings" class="screen-panel">
+          <h2 class="screen-title">Settings & Privacy Controls</h2>
+          <div class="placeholder">Settings and privacy controls · Per Complete Screen Inventory</div>
+        </div>
+
+        <p class="footer-app">AutoSphere AI – Complete Screen Inventory · Driver Mobile Application · Feb 2026</p>
+      </main>
     </div>
   </div>
 
   <script>
     const API = '';
-
+    const THEME_KEY = 'autosphere_theme';
+    function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem(THEME_KEY, theme);
+      var icon = document.getElementById('themeIcon');
+      if (icon) { icon.textContent = theme === 'dark' ? '🌙' : '☀️'; }
+      var btn = document.getElementById('themeToggle');
+      if (btn) btn.setAttribute('title', theme === 'dark' ? 'Switch to light' : 'Switch to dark');
+    }
+    setTheme(getTheme());
+    document.getElementById('themeToggle').onclick = function() {
+      setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    };
     function show(el) { if (el) el.classList.remove('hidden'); }
     function hide(el) { if (el) el.classList.add('hidden'); }
-
-    const loginView = document.getElementById('loginView');
-    const dashboardView = document.getElementById('dashboardView');
-    const loginError = document.getElementById('loginError');
-    const userEmail = document.getElementById('userEmail');
-    const welcomeEmail = document.getElementById('welcomeEmail');
-    const mobilityScore = document.getElementById('mobilityScore');
-    const riskResult = document.getElementById('riskResult');
-    const riskError = document.getElementById('riskError');
-
-    function setUser(email) {
-      if (userEmail) userEmail.textContent = email || 'Driver';
-      if (welcomeEmail) welcomeEmail.textContent = email ? 'Signed in as ' + email : 'View your mobility score and AI risk below.';
+    function showView(id) {
+      document.querySelectorAll('[id^="view-"]').forEach(v => { v.classList.add('hidden'); });
+      const v = document.getElementById('view-' + id);
+      if (v) v.classList.remove('hidden');
+      var topBar = document.querySelector('.top-right-actions');
+      if (topBar) topBar.style.display = (id === 'app') ? 'flex' : 'none';
+    }
+    function showPanel(id) {
+      document.querySelectorAll('.screen-panel').forEach(p => { p.classList.remove('active'); });
+      document.querySelectorAll('.sidebar .nav-item').forEach(n => { n.classList.remove('active'); });
+      const p = document.getElementById('panel-' + id);
+      const n = document.querySelector('.sidebar .nav-item[data-screen="' + id + '"]');
+      if (p) p.classList.add('active');
+      if (n) n.classList.add('active');
     }
 
-    function showLogin() {
-      show(loginView);
-      hide(dashboardView);
-      localStorage.removeItem('autosphere_token');
-      localStorage.removeItem('autosphere_email');
+    function goFromSplash() {
+      if (localStorage.getItem('autosphere_token')) { showView('app'); initApp(); }
+      else { showView('login'); }
+      hide(document.getElementById('view-splash'));
+    }
+    document.getElementById('view-splash').onclick = goFromSplash;
+    setTimeout(function() { if (document.getElementById('view-splash') && !document.getElementById('view-splash').classList.contains('hidden')) goFromSplash(); }, 2500);
+
+    // If already logged in, skip splash and go to app
+    if (localStorage.getItem('autosphere_token')) {
+      hide(document.getElementById('view-splash'));
+      showView('app');
+      initApp();
     }
 
-    function showDashboard(email) {
-      hide(loginView);
-      show(dashboardView);
-      setUser(email || localStorage.getItem('autosphere_email'));
-      loadMobilityScore();
-    }
+    document.getElementById('goSignup').onclick = function(e) { e.preventDefault(); showView('signup'); hide(document.getElementById('view-login')); };
+    document.getElementById('goLogin').onclick = function(e) { e.preventDefault(); showView('login'); hide(document.getElementById('view-signup')); };
+    document.getElementById('goLoginFromOtp').onclick = function(e) { e.preventDefault(); showView('login'); hide(document.getElementById('view-otp')); };
+    document.getElementById('skipBiometric').onclick = function(e) { e.preventDefault(); showView('app'); hide(document.getElementById('view-biometric')); initApp(); };
+    document.getElementById('biometricBtn').onclick = function() { showView('app'); hide(document.getElementById('view-biometric')); initApp(); };
+    document.getElementById('signupBtn').onclick = function() { showView('otp'); hide(document.getElementById('view-signup')); };
+    document.getElementById('otpVerifyBtn').onclick = function() { showView('login'); hide(document.getElementById('view-otp')); };
 
-    document.getElementById('loginBtn').onclick = async () => {
+    document.getElementById('loginBtn').onclick = async function() {
       const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      hide(loginError);
-      if (!email) { loginError.textContent = 'Please enter your email.'; show(loginError); return; }
+      const err = document.getElementById('loginError');
+      hide(err);
+      if (!email) { err.textContent = 'Enter email.'; show(err); return; }
       try {
-        const r = await fetch(API + '/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
+        const r = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: document.getElementById('password').value }) });
         const text = await r.text();
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}
         if (!r.ok) throw new Error(data.error || text || 'Login failed');
         if (data.token) localStorage.setItem('autosphere_token', data.token);
         localStorage.setItem('autosphere_email', email);
-        showDashboard(email);
+        hide(document.getElementById('view-login'));
+        showView('app');
+        initApp();
       } catch (e) {
-        loginError.textContent = e.message || 'Login failed. Try again.';
-        show(loginError);
+        err.textContent = e.message || 'Login failed.';
+        show(err);
       }
     };
 
-    document.getElementById('logoutBtn').onclick = function() { showLogin(); };
+    function doLogout() {
+      localStorage.removeItem('autosphere_token');
+      localStorage.removeItem('autosphere_email');
+      document.getElementById('view-app').classList.add('hidden');
+      showView('login');
+    }
+    document.getElementById('logoutBtn').onclick = doLogout;
+    document.getElementById('topLogoutBtn').onclick = doLogout;
 
-    async function loadMobilityScore() {
+    document.querySelectorAll('.sidebar .nav-item[data-screen]').forEach(function(item) {
+      item.onclick = function(e) { e.preventDefault(); showPanel(item.getAttribute('data-screen')); };
+    });
+
+    function setScoreRing(el, value) {
+      if (!el) return;
+      const num = Number(value);
+      const pct = isNaN(num) ? 0 : Math.min(100, (num / 1000) * 100);
+      el.style.setProperty('--pct', pct);
+    }
+    function setHealthBar(pct) {
+      const bar = document.getElementById('healthBar');
+      if (!bar) return;
+      const n = Number(pct);
+      bar.style.width = (isNaN(n) ? 0 : Math.min(100, n)) + '%';
+      bar.classList.remove('warn', 'danger');
+      if (n < 50) bar.classList.add('danger'); else if (n < 75) bar.classList.add('warn');
+    }
+
+    async function loadData() {
       try {
         const r = await fetch(API + '/vehicles/1');
         const text = await r.text();
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}
-        mobilityScore.textContent = data.mobilityScore != null ? data.mobilityScore : '—';
-      } catch (_) {
-        mobilityScore.textContent = '—';
-      }
-    }
-
-    document.getElementById('calcRiskBtn').onclick = async () => {
-      const raw = document.getElementById('riskFeatures').value.trim();
-      hide(riskResult);
-      hide(riskError);
-      const features = raw.split(/[\s,]+/).map(s => parseFloat(s)).filter(n => !isNaN(n));
-      if (features.length === 0) {
-        riskError.textContent = 'Enter at least one number (e.g. 0.1, 0.2, 0.3).';
-        show(riskError);
-        return;
-      }
+        const score = data.mobilityScore != null ? data.mobilityScore : null;
+        const health = data.healthPercent != null ? data.healthPercent : null;
+        if (document.getElementById('mobilityScoreVal')) document.getElementById('mobilityScoreVal').textContent = score != null ? score : '—';
+        setScoreRing(document.getElementById('scoreRing'), score);
+        if (document.getElementById('homeScore')) document.getElementById('homeScore').textContent = score != null ? score : '—';
+        if (document.getElementById('homeHealth')) document.getElementById('homeHealth').textContent = health != null ? health + '%' : '—';
+        if (document.getElementById('vehicleName')) document.getElementById('vehicleName').textContent = data.vehicleName || 'Primary Vehicle';
+        if (document.getElementById('healthPercent')) document.getElementById('healthPercent').textContent = health != null ? health : '—';
+        if (document.getElementById('vehicleStatus')) document.getElementById('vehicleStatus').textContent = data.status || '—';
+        if (document.getElementById('lastService')) document.getElementById('lastService').textContent = data.lastService || '—';
+        setHealthBar(health);
+        if (data.vii && document.getElementById('viiGrid')) {
+          const v = data.vii;
+          document.getElementById('viiGrid').innerHTML = [
+            { val: v.health, l: 'Health' }, { val: v.risk, l: 'Risk' }, { val: v.compliance, l: 'Compliance' }, { val: v.environmental, l: 'Env' }, { val: v.marketValue, l: 'Market' }
+          ].map(x => '<div class="vii-item"><span class="v">' + (x.val != null ? x.val : '—') + '</span><br><span class="l">' + x.l + '</span></div>').join('');
+        }
+      } catch (_) {}
       try {
-        const r = await fetch(API + '/ai/calculate-risk', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(features),
-        });
+        const r = await fetch(API + '/api/dashboard');
         const text = await r.text();
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}
-        if (!r.ok) throw new Error(data.error || data.detail || text || 'Request failed');
-        riskResult.textContent = 'Risk score: ' + (data.risk_score != null ? Number(data.risk_score).toFixed(2) : '—');
-        show(riskResult);
-      } catch (e) {
-        riskError.textContent = e.message || 'AI service error.';
-        show(riskError);
-      }
+        const alerts = data.predictiveMaintenanceAlerts || [];
+        const list = document.getElementById('maintenanceAlerts');
+        if (list) list.innerHTML = alerts.length ? alerts.map(a => '<li>' + (a.message || '') + '</li>').join('') : '<li>No alerts</li>';
+        const items = data.recentActivity || [];
+        const homeAct = document.getElementById('homeActivity');
+        if (homeAct) homeAct.innerHTML = items.length ? items.map(a => '<li><span>' + (a.label || '') + '</span><span class="time">' + (a.time || '') + '</span></li>').join('') : '<li>No activity</li>';
+      } catch (_) {}
+      try {
+        const r = await fetch(API + '/api/driver-companion');
+        const text = await r.text();
+        let data = {};
+        try { data = JSON.parse(text); } catch (_) {}
+        if (document.getElementById('insuranceForecast')) document.getElementById('insuranceForecast').textContent = data.insuranceForecast?.estimatedPremiumChange || '—';
+        if (document.getElementById('riskLevel')) document.getElementById('riskLevel').textContent = data.insuranceForecast?.riskLevel || '—';
+        if (document.getElementById('resaleValue')) document.getElementById('resaleValue').textContent = data.resaleEstimate?.value != null ? '$' + data.resaleEstimate.value.toLocaleString() : '—';
+        if (document.getElementById('resaleTrend')) document.getElementById('resaleTrend').textContent = data.resaleEstimate?.trend || '—';
+      } catch (_) {}
+    }
+
+    document.getElementById('calcRiskBtn').onclick = async function() {
+      const raw = document.getElementById('riskFeatures').value.trim();
+      const features = raw.split(/[\s,]+/).map(s => parseFloat(s)).filter(n => !isNaN(n));
+      const res = document.getElementById('riskResult');
+      const err = document.getElementById('riskError');
+      hide(res); hide(err);
+      if (features.length === 0) { err.textContent = 'Enter at least one number.'; show(err); return; }
+      try {
+        const r = await fetch(API + '/ai/calculate-risk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(features) });
+        const text = await r.text();
+        let data = {};
+        try { data = JSON.parse(text); } catch (_) {}
+        if (!r.ok) throw new Error(data.error || text);
+        res.textContent = 'Risk score: ' + (data.risk_score != null ? Number(data.risk_score).toFixed(2) : '—');
+        show(res);
+      } catch (e) { err.textContent = e.message; show(err); }
     };
 
-    if (localStorage.getItem('autosphere_token')) {
-      showDashboard();
-    } else {
-      showLogin();
+    function initApp() {
+      if (document.getElementById('userEmail')) document.getElementById('userEmail').textContent = localStorage.getItem('autosphere_email') || 'Driver';
+      loadData();
     }
   </script>
 </body>

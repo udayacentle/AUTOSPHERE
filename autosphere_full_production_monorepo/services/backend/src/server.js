@@ -9,15 +9,18 @@ app.use(bodyParser.json());
 const SECRET = process.env.SECRET || 'AUTOSPHERE_SECRET';
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
 
-// API: health/info (for programmatic check)
+// API: health/info (BRD-aligned)
 app.get('/api', (req, res) => {
   res.json({
-    service: 'AutoSphere Backend',
+    service: 'AutoSphere AI - Intelligent Automotive Ecosystem Platform',
+    version: '1.0',
     status: 'running',
     endpoints: {
       'POST /auth/login': 'Login',
-      'GET /vehicles/1': 'Vehicle mobility score',
-      'POST /ai/calculate-risk': 'AI risk score',
+      'GET /vehicles/1': 'Vehicle + VII (Vehicle Intelligence Index)',
+      'GET /api/dashboard': 'Driver dashboard data',
+      'GET /api/driver-companion': 'Driver AI Companion module',
+      'POST /ai/calculate-risk': 'Insurance AI - dynamic risk scoring',
     },
   });
 });
@@ -28,8 +31,51 @@ app.post('/auth/login', (req, res) => {
   res.json({ token });
 });
 
+// Vehicle + VII (Vehicle Intelligence Index): health, risk, compliance, market (BRD §4)
 app.get('/vehicles/1', (req, res) => {
-  res.json({ mobilityScore: 870 });
+  res.json({
+    mobilityScore: 870,
+    vehicleName: 'Primary Vehicle',
+    healthPercent: 92,
+    status: 'Good',
+    lastService: '2025-02-15',
+    vii: {
+      health: 92,
+      risk: 18,
+      compliance: 95,
+      environmental: 88,
+      marketValue: 78,
+    },
+  });
+});
+
+app.get('/api/dashboard', (req, res) => {
+  res.json({
+    mobilityScore: 870,
+    vehicle: { id: 1, name: 'Primary Vehicle', health: 92, status: 'Good' },
+    predictiveMaintenanceAlerts: [
+      { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule in 60 days', dueIn: '60 days' },
+      { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days', dueIn: '30 days' },
+    ],
+    recentActivity: [
+      { id: 1, type: 'trip', label: 'Trip completed', time: '2 hours ago' },
+      { id: 2, type: 'score', label: 'Vehicle Intelligence Index (VII) updated', time: '5 hours ago' },
+      { id: 3, type: 'service', label: 'Predictive maintenance: service due in 30 days', time: '1 day ago' },
+    ],
+  });
+});
+
+// Driver AI Companion module (BRD §5): behavior, predictive maintenance, insurance forecast, resale
+app.get('/api/driver-companion', (req, res) => {
+  res.json({
+    drivingBehavior: { score: 85, summary: 'Good', lastUpdated: '2 hours ago' },
+    predictiveMaintenanceAlerts: [
+      { severity: 'low', message: 'Brake pads – schedule in 60 days', dueIn: '60 days' },
+      { severity: 'info', message: 'Oil change in 30 days', dueIn: '30 days' },
+    ],
+    insuranceForecast: { estimatedPremiumChange: '-5%', riskLevel: 'Low', nextReview: 'Next month' },
+    resaleEstimate: { value: 24500, currency: 'USD', trend: 'stable', lastUpdated: '1 week ago' },
+  });
 });
 
 // Proxy to AI service (avoids CORS; Docker: AI_SERVICE_URL=http://ai:8000)

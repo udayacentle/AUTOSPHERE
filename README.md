@@ -1,6 +1,8 @@
-# AutoSphere
+# AutoSphere AI
 
-Driver app and backend for the AutoSphere AI mobility platform.
+**Intelligent Automotive Ecosystem Platform** (aligned with AutoSphere AI BRD v1.0).
+
+Unified ecosystem for drivers, insurance risk intelligence, digital twin vehicle engine, and Vehicle Intelligence Index (VII).
 
 ## Repo structure
 
