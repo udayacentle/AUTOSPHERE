@@ -26,8 +26,8 @@ app.get('/api', (req, res) => {
 });
 
 app.post('/auth/login', (req, res) => {
-  const { email } = req.body;
-  const token = jwt.sign({ email }, SECRET, { expiresIn: '1h' });
+  const email = req.body.email || req.body.usernameOrEmail;
+  const token = jwt.sign({ email: email || 'user@autosphere.demo' }, SECRET, { expiresIn: '1h' });
   res.json({ token });
 });
 
@@ -56,6 +56,17 @@ app.get('/auth/google/callback', (req, res) => {
   res.redirect(302, '/?token=' + token);
 });
 
+// Apple Sign In (placeholder: redirect to app or show “not configured”)
+app.get('/auth/apple', (req, res) => {
+  // In production: redirect to Apple ID auth; configure APPLE_CLIENT_ID and APPLE_REDIRECT_URI
+  const token = jwt.sign({ email: 'apple-user@autosphere.demo', provider: 'apple' }, SECRET, { expiresIn: '1h' });
+  res.redirect(302, '/?token=' + token);
+});
+app.get('/auth/apple/callback', (req, res) => {
+  const token = jwt.sign({ email: 'apple-user@autosphere.demo', provider: 'apple' }, SECRET, { expiresIn: '1h' });
+  res.redirect(302, '/?token=' + token);
+});
+
 // Vehicle + VII (Vehicle Intelligence Index): health, risk, compliance, market (BRD §4)
 app.get('/vehicles/1', (req, res) => {
   res.json({
@@ -64,6 +75,15 @@ app.get('/vehicles/1', (req, res) => {
     healthPercent: 92,
     status: 'Good',
     lastService: '2025-02-15',
+    make: 'Toyota',
+    model: 'Camry',
+    year: 2023,
+    vin: '1HGBH41JXMN109186',
+    odometerMi: 12450,
+    odometerKm: 20035,
+    fuelType: 'Gasoline',
+    color: 'Silver',
+    licensePlate: 'ABC 1234',
     vii: {
       health: 92,
       risk: 18,
@@ -87,6 +107,15 @@ app.get('/api/dashboard', (req, res) => {
       { id: 2, type: 'score', label: 'Vehicle Intelligence Index (VII) updated', time: '5 hours ago' },
       { id: 3, type: 'service', label: 'Predictive maintenance: service due in 30 days', time: '1 day ago' },
     ],
+    drivingReports: {
+      weekly: { trips: 8, distanceMi: 142, distanceKm: 228.5, driveTimeMinutes: 320, fuelUsedGal: 5.2, fuelUsedL: 19.7 },
+      monthly: { trips: 34, distanceMi: 612, distanceKm: 984.9, driveTimeMinutes: 1380, fuelUsedGal: 22.1, fuelUsedL: 83.7 },
+      recentTrips: [
+        { date: '2026-03-07', label: 'Commute', distanceMi: 24, distanceKm: 38.6 },
+        { date: '2026-03-06', label: 'Errands', distanceMi: 12, distanceKm: 19.3 },
+        { date: '2026-03-05', label: 'Highway', distanceMi: 85, distanceKm: 136.8 },
+      ],
+    },
   });
 });
 

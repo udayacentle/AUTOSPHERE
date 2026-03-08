@@ -13,6 +13,7 @@
       --border: #334155;
       --text: #e2e8f0;
       --muted: #94a3b8;
+      --input-bg: #0a0f1a;
       --primary: #0ea5e9;
       --primary-hover: #0284c7;
       --success: #22c55e;
@@ -26,6 +27,7 @@
       --border: #e2e8f0;
       --text: #0f172a;
       --muted: #64748b;
+      --input-bg: #e2e8f0;
       --primary: #0284c7;
       --primary-hover: #0369a1;
       --success: #16a34a;
@@ -78,6 +80,14 @@
     .logout-icon-btn:hover { background: var(--surface-hover); transform: scale(1.05); }
     .logout-icon-btn:active { transform: scale(0.98); }
     [data-theme="light"] .logout-icon-btn { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .profile-icon-btn {
+      width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-family: inherit;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .profile-icon-btn:hover { background: var(--surface-hover); transform: scale(1.05); }
+    .profile-icon-btn:active { transform: scale(0.98); }
+    [data-theme="light"] .profile-icon-btn { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     .hidden { display: none !important; }
 
@@ -118,7 +128,7 @@
     .auth-card .password-toggle .icon-hide { display: inline-flex; }
     .auth-card .password-wrap.visible .password-toggle .icon-show { display: inline-flex; }
     .auth-card .password-wrap.visible .password-toggle .icon-hide { display: none; }
-    .auth-card input, .auth-card button { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--surface-hover); background: var(--bg); color: var(--text); font-size: 1rem; margin-bottom: 10px; }
+    .auth-card input, .auth-card button { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--surface-hover); background: var(--input-bg); color: var(--text); font-size: 1rem; margin-bottom: 10px; }
     .auth-card button:not(.password-toggle) { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
     .auth-card button:not(.password-toggle):hover { background: var(--primary-hover); }
     .auth-card .link { margin-top: 14px; text-align: center; }
@@ -241,11 +251,41 @@
     .home-activity-list li:last-child { border-bottom: none; }
     .home-activity-list li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); opacity: 0.6; margin-right: 14px; flex-shrink: 0; }
     .home-activity-list .time { font-size: 0.8rem; color: var(--muted); }
+    .report-tab { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.9rem; }
+    .report-tab:hover { background: var(--surface-hover); }
+    .report-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .profile-form .field-label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text); }
+    .profile-form .field-label .required { color: var(--danger); margin-left: 2px; }
+    .profile-form input, .profile-form select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 1rem; margin-bottom: 12px; box-sizing: border-box; }
+    .profile-form .email-phone-row, .profile-form .units-lang-row { display: flex; gap: 16px; margin-bottom: 12px; }
+    .profile-form .email-phone-row > div, .profile-form .units-lang-row > div { flex: 1; min-width: 0; }
+    .profile-form .email-phone-row .field-label, .profile-form .units-lang-row .field-label { margin-bottom: 4px; }
+    .profile-form .email-phone-row input, .profile-form .email-phone-row select, .profile-form .units-lang-row select { margin-bottom: 0; }
+    .profile-form .phone-row { display: flex; gap: 8px; margin-bottom: 0; }
+    .profile-form .country-code-wrap { width: 140px; flex-shrink: 0; }
+    .profile-form .country-code-wrap select { margin-bottom: 0; }
+    .profile-form .phone-input { flex: 1; min-width: 0; margin-bottom: 0; }
+    @media (max-width: 560px) {
+      .profile-form .email-phone-row, .profile-form .units-lang-row { flex-direction: column; gap: 0; }
+      .profile-form .email-phone-row > div, .profile-form .units-lang-row > div { margin-bottom: 12px; }
+      .profile-form .email-phone-row input, .profile-form .units-lang-row select { margin-bottom: 12px; }
+    }
+    .profile-form .section-title { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 16px 0 8px; }
+    .profile-form .btn-save { padding: 12px 24px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; margin-top: 12px; }
+    .profile-form .btn-save:hover { background: var(--primary-hover); }
+    .profile-form #profileStatus { font-size: 0.9rem; margin-top: 8px; }
+    .profile-saved-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: none; align-items: center; justify-content: center; }
+    .profile-saved-overlay.show { display: flex; }
+    .profile-saved-popup { background: var(--surface); border-radius: 16px; padding: 24px; max-width: 320px; border: 1px solid var(--border); }
+    .profile-saved-popup h3 { margin: 0 0 8px; font-size: 1.2rem; color: var(--primary); }
+    .profile-saved-popup p { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; }
+    .profile-saved-popup .btn-ok { width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
   </style>
 </head>
 <body>
   <div class="top-right-actions">
       <button type="button" class="theme-icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme"><span id="themeIcon" aria-hidden="true">🌙</span></button>
+      <button type="button" class="profile-icon-btn hidden" id="topProfileBtn" title="Onboarding & Profile" aria-label="Profile">👤</button>
       <button type="button" class="logout-icon-btn" id="topLogoutBtn" title="Logout" aria-label="Logout">⏻</button>
     </div>
   <div id="app">
@@ -258,54 +298,64 @@
 
     <!-- Authentication: Login -->
     <div id="view-login" class="auth-wrap hidden">
-      <div class="auth-card">
-        <h1>Login</h1>
-        <p class="sub">Sign in to your Driver account. Fields marked with <span class="required">*</span> are required.</p>
-        <label class="field-label" for="email">Email <span class="required">*</span></label>
-        <input type="email" id="email" placeholder="Email" autocomplete="email" required />
-        <label class="field-label" for="password">Password <span class="required">*</span></label>
+      <div class="auth-card" style="text-align:center">
+        <h1 style="text-align:center" data-i18n="loginTitle">Login</h1>
+        <p class="sub" data-i18n="loginSub">Sign in with your username or email. Fields marked with <span class="required">*</span> are required.</p>
+        <label class="field-label" for="email" data-i18n="usernameOrEmail">Username or email <span class="required">*</span></label>
+        <input type="text" id="email" data-i18n-placeholder="usernameOrEmail" placeholder="Username or email" autocomplete="username" required />
+        <label class="field-label" for="password" data-i18n="password">Password <span class="required">*</span></label>
         <div class="password-wrap" id="passwordWrapLogin">
-          <input type="password" id="password" placeholder="Password" required />
+          <input type="password" id="password" data-i18n-placeholder="password" placeholder="Password" required />
           <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
         </div>
         <p id="loginError" class="error hidden"></p>
-        <button type="button" id="loginBtn">Sign in</button>
+        <button type="button" id="loginBtn" data-i18n="signIn">Sign in</button>
         <div class="auth-divider"><span>or</span></div>
         <button type="button" class="btn-google" id="loginGoogleBtn" title="Continue with Google">
           <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Continue with Google
+          <span data-i18n="continueGoogle">Continue with Google</span>
         </button>
-        <div class="link"><a href="#" id="goSignup">Create account (Signup)</a></div>
+        <button type="button" class="btn-google" id="loginAppleBtn" title="Continue with Apple" style="margin-top:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c1.33-1.61 1.14-3.89-.2-5.22-1.34-1.33-3.55-1.5-4.95-.17-1.41 1.32-1.33 3.58.19 4.92 1.34 1.34 3.6 1.51 4.96.47z"/></svg>
+          <span data-i18n="continueApple">Continue with Apple</span>
+        </button>
+        <div class="link" style="text-align:center;margin-top:14px"><a href="#" id="goSignup" data-i18n="createAccount">Create account (Signup)</a></div>
       </div>
     </div>
 
     <!-- Authentication: Signup -->
     <div id="view-signup" class="auth-wrap hidden">
-      <div class="auth-card">
-        <h1>Signup</h1>
-        <p class="sub">Create your Driver account. Fields marked with <span class="required">*</span> are required.</p>
-        <label class="field-label" for="signupName">Full name <span class="required">*</span></label>
-        <input type="text" id="signupName" placeholder="Full name" required />
-        <label class="field-label" for="signupEmail">Email <span class="required">*</span></label>
-        <input type="email" id="signupEmail" placeholder="Email" autocomplete="email" required />
+      <div class="auth-card" style="text-align:center">
+        <h1 style="text-align:center" data-i18n="signupTitle">Signup</h1>
+        <p class="sub" data-i18n="signupSub">Create your Driver account. Fields marked with <span class="required">*</span> are required.</p>
+        <label class="field-label" for="signupName" data-i18n="fullName">Full name <span class="required">*</span></label>
+        <input type="text" id="signupName" data-i18n-placeholder="fullName" placeholder="Full name" autocomplete="name" required />
+        <label class="field-label" for="signupUsername" data-i18n="username">Username <span class="required">*</span></label>
+        <input type="text" id="signupUsername" data-i18n-placeholder="username" placeholder="Username" autocomplete="username" required />
+        <label class="field-label" for="signupEmail" data-i18n="email">Email <span class="required">*</span></label>
+        <input type="email" id="signupEmail" data-i18n-placeholder="email" placeholder="Email" autocomplete="email" required />
         <label class="field-label" for="signupPassword">Password <span class="required">*</span></label>
         <div class="password-wrap" id="passwordWrapSignup">
           <input type="password" id="signupPassword" placeholder="Password" required />
           <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
         </div>
-        <label class="field-label" for="signupPasswordRetype">Retype password <span class="required">*</span></label>
+        <label class="field-label" for="signupPasswordRetype" data-i18n="retypePassword">Retype password <span class="required">*</span></label>
         <div class="password-wrap" id="passwordWrapSignupRetype">
           <input type="password" id="signupPasswordRetype" placeholder="Retype password" required />
           <button type="button" class="password-toggle" aria-label="Show password" title="Show password"><span class="icon-show" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="eye-outline" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" stroke-width="1.25"/><circle class="eye-iris" cx="12" cy="12" r="5"/><circle class="eye-pupil" cx="12" cy="12" r="2.8"/></svg></span><span class="icon-hide" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.5-1.32 2.73-2.96 3.56-4.78C21.27 7.11 17 4 12 4c-1.4 0-2.73.25-3.98.7l1.74 1.74c.57-.23 1.18-.44 1.84-.44zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></span></button>
         </div>
         <p id="signupError" class="error hidden"></p>
-        <button type="button" id="signupBtn">Create account</button>
+        <button type="button" id="signupBtn" data-i18n="createAccountBtn">Create account</button>
         <div class="auth-divider"><span>or</span></div>
         <button type="button" class="btn-google" id="signupGoogleBtn" title="Continue with Google">
           <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Continue with Google
+          <span data-i18n="continueGoogle">Continue with Google</span>
         </button>
-        <div class="link"><a href="#" id="goLogin">Already have an account? Login</a></div>
+        <button type="button" class="btn-google" id="signupAppleBtn" title="Continue with Apple" style="margin-top:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c1.33-1.61 1.14-3.89-.2-5.22-1.34-1.33-3.55-1.5-4.95-.17-1.41 1.32-1.33 3.58.19 4.92 1.34 1.34 3.6 1.51 4.96.47z"/></svg>
+          <span data-i18n="continueApple">Continue with Apple</span>
+        </button>
+        <div class="link" style="text-align:center;margin-top:14px"><a href="#" id="goLogin" data-i18n="alreadyHaveAccount">Already have an account? Login</a></div>
       </div>
     </div>
 
@@ -337,63 +387,63 @@
         <div class="logo">AutoSphere AI</div>
         <div class="user" id="userEmail">Driver</div>
         <nav>
-          <div class="nav-group">Driver Mobile Application</div>
-          <a href="#" class="nav-item active" data-screen="home"><span>Home Dashboard</span></a>
-          <a href="#" class="nav-item" data-screen="onboarding"><span>Onboarding & Profile Setup</span></a>
-          <a href="#" class="nav-item" data-screen="mobilityScore"><span>Mobility Score (VII)</span></a>
-          <a href="#" class="nav-item" data-screen="drivingReports"><span>Driving Reports</span></a>
-          <a href="#" class="nav-item" data-screen="vehicleDetails"><span>Vehicle Details & Digital Twin</span></a>
-          <a href="#" class="nav-item" data-screen="vehicleHealth"><span>Vehicle Health Breakdown</span></a>
-          <a href="#" class="nav-item" data-screen="serviceHistory"><span>Service History Timeline</span></a>
-          <a href="#" class="nav-item" data-screen="predictiveMaintenance"><span>Predictive Maintenance Alerts</span></a>
-          <a href="#" class="nav-item" data-screen="drivingAnalytics"><span>Driving Analytics & Risk</span></a>
-          <a href="#" class="nav-item" data-screen="tripHistory"><span>Trip History & Summary</span></a>
-          <a href="#" class="nav-item" data-screen="fuelCarbon"><span>Fuel Efficiency & Carbon</span></a>
-          <a href="#" class="nav-item" data-screen="insuranceOverview"><span>Insurance Overview & Premium</span></a>
-          <a href="#" class="nav-item" data-screen="claimsUpload"><span>Claims Upload & AI Damage</span></a>
-          <a href="#" class="nav-item" data-screen="claimStatus"><span>Claim Status Tracker</span></a>
-          <a href="#" class="nav-item" data-screen="nearbyServices"><span>Nearby Service Centers & Booking</span></a>
-          <a href="#" class="nav-item" data-screen="technicianProfile"><span>Technician Profile View</span></a>
-          <a href="#" class="nav-item" data-screen="liveRepair"><span>Live Repair Tracking</span></a>
-          <a href="#" class="nav-item" data-screen="parking"><span>Parking Map & Booking</span></a>
-          <a href="#" class="nav-item" data-screen="evCharging"><span>EV Charging & Usage</span></a>
-          <a href="#" class="nav-item" data-screen="emergency"><span>Emergency & Accident Detection</span></a>
-          <a href="#" class="nav-item" data-screen="roadside"><span>Roadside Assistance</span></a>
-          <a href="#" class="nav-item" data-screen="resale"><span>Resale Value Estimator</span></a>
-          <a href="#" class="nav-item" data-screen="loanCalculator"><span>Loan & EMI Calculator</span></a>
-          <a href="#" class="nav-item" data-screen="marketplace"><span>Marketplace</span></a>
-          <a href="#" class="nav-item" data-screen="settings"><span>Settings & Privacy</span></a>
+          <div class="nav-group" data-i18n="navGroup">Driver Mobile Application</div>
+          <a href="#" class="nav-item active" data-screen="home"><span data-i18n="navHome">Home Dashboard</span></a>
+          <a href="#" class="nav-item" data-screen="onboarding"><span data-i18n="navProfile">Onboarding & Profile Setup</span></a>
+          <a href="#" class="nav-item" data-screen="mobilityScore"><span data-i18n="navMobility">Mobility Score (VII)</span></a>
+          <a href="#" class="nav-item" data-screen="drivingReports"><span data-i18n="navDrivingReports">Driving Reports</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleDetails"><span data-i18n="navVehicleDetails">Vehicle Details & Digital Twin</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleHealth"><span data-i18n="navVehicleHealth">Vehicle Health Breakdown</span></a>
+          <a href="#" class="nav-item" data-screen="serviceHistory"><span data-i18n="navServiceHistory">Service History Timeline</span></a>
+          <a href="#" class="nav-item" data-screen="predictiveMaintenance"><span data-i18n="navPredictive">Predictive Maintenance Alerts</span></a>
+          <a href="#" class="nav-item" data-screen="drivingAnalytics"><span data-i18n="navAnalytics">Driving Analytics & Risk</span></a>
+          <a href="#" class="nav-item" data-screen="tripHistory"><span data-i18n="navTripHistory">Trip History & Summary</span></a>
+          <a href="#" class="nav-item" data-screen="fuelCarbon"><span data-i18n="navFuel">Fuel Efficiency & Carbon</span></a>
+          <a href="#" class="nav-item" data-screen="insuranceOverview"><span data-i18n="navInsurance">Insurance Overview & Premium</span></a>
+          <a href="#" class="nav-item" data-screen="claimsUpload"><span data-i18n="navClaims">Claims Upload & AI Damage</span></a>
+          <a href="#" class="nav-item" data-screen="claimStatus"><span data-i18n="navClaimStatus">Claim Status Tracker</span></a>
+          <a href="#" class="nav-item" data-screen="nearbyServices"><span data-i18n="navNearby">Nearby Service Centers & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="technicianProfile"><span data-i18n="navTechnician">Technician Profile View</span></a>
+          <a href="#" class="nav-item" data-screen="liveRepair"><span data-i18n="navLiveRepair">Live Repair Tracking</span></a>
+          <a href="#" class="nav-item" data-screen="parking"><span data-i18n="navParking">Parking Map & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="evCharging"><span data-i18n="navEvCharging">EV Charging & Usage</span></a>
+          <a href="#" class="nav-item" data-screen="emergency"><span data-i18n="navEmergency">Emergency & Accident Detection</span></a>
+          <a href="#" class="nav-item" data-screen="roadside"><span data-i18n="navRoadside">Roadside Assistance</span></a>
+          <a href="#" class="nav-item" data-screen="resale"><span data-i18n="navResale">Resale Value Estimator</span></a>
+          <a href="#" class="nav-item" data-screen="loanCalculator"><span data-i18n="navLoan">Loan & EMI Calculator</span></a>
+          <a href="#" class="nav-item" data-screen="marketplace"><span data-i18n="navMarketplace">Marketplace</span></a>
+          <a href="#" class="nav-item" data-screen="settings"><span data-i18n="navSettings">Settings & Privacy</span></a>
         </nav>
-        <button type="button" class="btn-logout" id="logoutBtn">Logout</button>
+        <button type="button" class="btn-logout" id="logoutBtn" data-i18n="logout">Logout</button>
       </aside>
       <main class="main-content">
         <!-- Home Dashboard -->
         <div id="panel-home" class="screen-panel active">
           <div class="home-dash">
             <div class="home-welcome">
-              <h2>Welcome back</h2>
-              <p>Your mobility overview and quick snapshot.</p>
+              <h2 data-i18n="welcomeBack">Welcome back</h2>
+              <p data-i18n="welcomeSub">Your mobility overview and quick snapshot.</p>
             </div>
             <div class="home-kpi-row">
               <div class="home-kpi-card">
                 <div class="home-kpi-icon" aria-hidden="true">📊</div>
                 <div class="home-kpi-body">
-                  <p class="label">Vehicle Intelligence Index (VII)</p>
+                  <p class="label" data-i18n="viiLabel">Vehicle Intelligence Index (VII)</p>
                   <p id="homeScore" class="value">—</p>
-                  <p class="sublabel">Mobility score · Out of 1000</p>
+                  <p class="sublabel" data-i18n="mobilityScoreOutOf">Mobility score · Out of 1000</p>
                 </div>
               </div>
               <div class="home-kpi-card">
                 <div class="home-kpi-icon" aria-hidden="true">🔧</div>
                 <div class="home-kpi-body">
-                  <p class="label">Vehicle Health</p>
+                  <p class="label" data-i18n="vehicleHealth">Vehicle Health</p>
                   <p id="homeHealth" class="value">—</p>
-                  <p class="sublabel">Digital twin status</p>
+                  <p class="sublabel" data-i18n="digitalTwinStatus">Digital twin status</p>
                 </div>
               </div>
             </div>
             <div class="home-activity-card">
-              <p class="card-head">Recent Activity</p>
+              <p class="card-head" data-i18n="recentActivity">Recent Activity</p>
               <ul class="home-activity-list" id="homeActivity"></ul>
             </div>
           </div>
@@ -410,24 +460,158 @@
 
         <!-- Onboarding & Profile Setup -->
         <div id="panel-onboarding" class="screen-panel">
-          <h2 class="screen-title">Onboarding & Profile Setup</h2>
-          <div class="placeholder">Onboarding and profile setup · Per Complete Screen Inventory</div>
+          <h2 class="screen-title" data-i18n="profileTitle">Profile</h2>
+          <form id="profileForm" class="profile-form" onsubmit="return false;" onkeydown="if (event.key === 'Enter') event.preventDefault();" novalidate>
+            <label class="field-label" for="profileUsername" data-i18n="username">Username <span class="required">*</span></label>
+            <input type="text" id="profileUsername" data-i18n-placeholder="username" placeholder="Username" autocomplete="username" />
+            <label class="field-label" for="profileFullName" data-i18n="fullName">Full name <span class="required">*</span></label>
+            <input type="text" id="profileFullName" data-i18n-placeholder="fullName" placeholder="Full name" autocomplete="name" />
+            <div class="email-phone-row">
+              <div>
+                <label class="field-label" for="profileEmail" data-i18n="email">Email <span class="required">*</span></label>
+                <input type="email" id="profileEmail" data-i18n-placeholder="email" placeholder="Email" autocomplete="email" />
+              </div>
+              <div>
+                <label class="field-label" data-i18n="phoneLabel">Phone <span class="required">*</span></label>
+                <div class="phone-row">
+                  <div class="country-code-wrap">
+                    <select id="profileCountryCode" aria-label="Country code">
+                  <option value="+1">United States +1</option>
+                  <option value="+91">India +91</option>
+                  <option value="+44">United Kingdom +44</option>
+                  <option value="+49">Germany +49</option>
+                  <option value="+33">France +33</option>
+                  <option value="+81">Japan +81</option>
+                  <option value="+86">China +86</option>
+                  <option value="+61">Australia +61</option>
+                  <option value="+55">Brazil +55</option>
+                  <option value="+52">Mexico +52</option>
+                  <option value="+34">Spain +34</option>
+                  <option value="+39">Italy +39</option>
+                  <option value="+31">Netherlands +31</option>
+                  <option value="+82">South Korea +82</option>
+                  <option value="+971">UAE +971</option>
+                  <option value="+966">Saudi Arabia +966</option>
+                  <option value="+27">South Africa +27</option>
+                  <option value="+234">Nigeria +234</option>
+                  <option value="+20">Egypt +20</option>
+                  <option value="+54">Argentina +54</option>
+                  <option value="+57">Colombia +57</option>
+                  <option value="+351">Portugal +351</option>
+                  <option value="+358">Finland +358</option>
+                  <option value="+46">Sweden +46</option>
+                  <option value="+47">Norway +47</option>
+                  <option value="+353">Ireland +353</option>
+                  <option value="+64">New Zealand +64</option>
+                  <option value="+65">Singapore +65</option>
+                  <option value="+60">Malaysia +60</option>
+                  <option value="+63">Philippines +63</option>
+                  <option value="+66">Thailand +66</option>
+                  <option value="+92">Pakistan +92</option>
+                  <option value="+880">Bangladesh +880</option>
+                  <option value="+90">Turkey +90</option>
+                  <option value="+7">Russia +7</option>
+                  <option value="+380">Ukraine +380</option>
+                  <option value="+48">Poland +48</option>
+                  <option value="+32">Belgium +32</option>
+                  <option value="+41">Switzerland +41</option>
+                  <option value="+43">Austria +43</option>
+                  <option value="+45">Denmark +45</option>
+                  <option value="+46">Sweden +46</option>
+                  <option value="+353">Ireland +353</option>
+                  <option value="+31">Netherlands +31</option>
+                </select>
+                  </div>
+                  <input type="tel" id="profilePhone" class="phone-input" placeholder="Phone number" autocomplete="tel" />
+                </div>
+              </div>
+            </div>
+            <label class="field-label" for="profileLicense" data-i18n="licenseNumber">License number <span class="required">*</span></label>
+            <input type="text" id="profileLicense" data-i18n-placeholder="licenseNumber" placeholder="Driver license number" />
+            <p class="section-title" data-i18n="driverPrefs">Driver preferences</p>
+            <div class="units-lang-row">
+              <div>
+                <label class="field-label" for="profileUnits" data-i18n="distanceUnits">Distance units</label>
+                <select id="profileUnits">
+                  <option value="mi">Miles (mi)</option>
+                  <option value="km">Kilometers (km)</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="profileLanguage" data-i18n="languageLabel">Language</label>
+                <select id="profileLanguage">
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+            </div>
+            <p class="section-title" data-i18n="notifications">Notifications</p>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer">
+              <input type="checkbox" id="profileNotifyEmail" style="width:auto;margin:0" />
+              <span data-i18n="emailNotifications">Email notifications</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer">
+              <input type="checkbox" id="profileNotifyPush" style="width:auto;margin:0" />
+              <span data-i18n="pushNotifications">Push notifications</span>
+            </label>
+            <p id="profileStatus" class="error hidden"></p>
+            <button type="button" class="btn-save" id="profileSaveBtn" data-i18n="saveProfile">Save profile</button>
+          </form>
+        </div>
+        <div id="profileSavedOverlay" class="profile-saved-overlay" aria-hidden="true">
+          <div class="profile-saved-popup">
+            <h3 data-i18n="profileSaved">Profile saved</h3>
+            <p data-i18n="profileSavedMsg">Your profile has been updated successfully.</p>
+            <button type="button" class="btn-ok" id="profileSavedOkBtn" data-i18n="ok">OK</button>
+          </div>
         </div>
 
         <!-- Driving Reports -->
         <div id="panel-drivingReports" class="screen-panel">
           <h2 class="screen-title">Driving Reports (Weekly/Monthly)</h2>
-          <div class="placeholder">Weekly and monthly driving reports · Per Complete Screen Inventory</div>
+          <div class="card">
+            <div style="display:flex;gap:8px;margin-bottom:16px">
+              <button type="button" id="drivingReportTabWeekly" class="report-tab active" data-i18n="thisWeek">This week</button>
+              <button type="button" id="drivingReportTabMonthly" class="report-tab" data-i18n="thisMonth">This month</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px" class="report-kpi-row">
+              <div class="card" style="padding:12px"><p class="kpi-label" data-i18n="trips">Trips</p><p id="reportTrips" class="kpi-value" style="font-size:1.2rem">—</p></div>
+              <div class="card" style="padding:12px"><p class="kpi-label" data-i18n="distance">Distance</p><p id="reportDistance" class="kpi-value" style="font-size:1.2rem">—</p></div>
+              <div class="card" style="padding:12px"><p class="kpi-label" data-i18n="driveTime">Drive time</p><p id="reportDriveTime" class="kpi-value" style="font-size:1.2rem">—</p></div>
+              <div class="card" style="padding:12px"><p class="kpi-label" data-i18n="fuelUsed">Fuel used</p><p id="reportFuel" class="kpi-value" style="font-size:1.2rem">—</p></div>
+            </div>
+            <p class="kpi-label" style="margin-bottom:8px" data-i18n="recentTrips">Recent trips</p>
+            <ul id="drivingReportRecentTrips" style="list-style:none;margin:0;padding:0"></ul>
+          </div>
         </div>
 
         <!-- Vehicle Details & Digital Twin View -->
         <div id="panel-vehicleDetails" class="screen-panel">
           <h2 class="screen-title">Vehicle Details & Digital Twin View</h2>
-          <div class="card">
-            <p class="card-title">Digital Twin</p>
-            <p id="vehicleName" class="kpi-value" style="font-size:1rem">—</p>
-            <div class="health-bar-wrap"><div class="health-bar" id="healthBar" style="width:0%"></div></div>
-            <p class="kpi-label"><span id="healthPercent">—</span>% · <span id="vehicleStatus">—</span> · Last service: <span id="lastService">—</span></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div class="card">
+              <p class="card-title" data-i18n="vehicleDetails">Vehicle details</p>
+              <dl style="display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0;font-size:0.95rem">
+                <dt style="color:var(--muted)" data-i18n="make">Make</dt><dd id="vehicleMake">—</dd>
+                <dt style="color:var(--muted)" data-i18n="model">Model</dt><dd id="vehicleModel">—</dd>
+                <dt style="color:var(--muted)" data-i18n="year">Year</dt><dd id="vehicleYear">—</dd>
+                <dt style="color:var(--muted)" data-i18n="vin">VIN</dt><dd id="vehicleVin" style="font-family:ui-monospace;font-size:0.85rem;word-break:break-all">—</dd>
+                <dt style="color:var(--muted)" data-i18n="odometer">Odometer</dt><dd id="vehicleOdometer">—</dd>
+                <dt style="color:var(--muted)" data-i18n="fuelType">Fuel type</dt><dd id="vehicleFuelType">—</dd>
+                <dt style="color:var(--muted)" data-i18n="color">Color</dt><dd id="vehicleColor">—</dd>
+                <dt style="color:var(--muted)" data-i18n="licensePlate">License plate</dt><dd id="vehicleLicensePlate">—</dd>
+              </dl>
+            </div>
+            <div class="card">
+              <p class="card-title" data-i18n="digitalTwin">Digital Twin</p>
+              <p id="vehicleName" class="kpi-value" style="font-size:1.1rem;margin-bottom:8px">—</p>
+              <div class="health-bar-wrap"><div class="health-bar" id="healthBar" style="width:0%"></div></div>
+              <p class="kpi-label" style="margin-top:8px"><span id="healthPercent">—</span>% health · <span id="vehicleStatus">—</span></p>
+              <p class="kpi-label"><span data-i18n="lastService">Last service</span>: <span id="lastService">—</span></p>
+              <p class="kpi-label" style="margin-top:12px"><span data-i18n="mobilityScoreLabel">Mobility Score (VII)</span>: <strong id="vehicleDetailsScore">—</strong> / 1000</p>
+            </div>
           </div>
         </div>
 
@@ -578,6 +762,117 @@
 
   <script>
     const API = '';
+    var TRANSLATIONS = {
+      loginTitle: { en: 'Login', es: 'Iniciar sesión', fr: 'Connexion', de: 'Anmelden' },
+      loginSub: { en: 'Sign in with your username or email. Fields marked with * are required.', es: 'Inicia sesión con tu usuario o correo. Los campos con * son obligatorios.', fr: 'Connectez-vous avec votre nom d\'utilisateur ou e-mail. Les champs * sont obligatoires.', de: 'Melden Sie sich mit Benutzername oder E-Mail an. Mit * markierte Felder sind Pflichtfelder.' },
+      usernameOrEmail: { en: 'Username or email *', es: 'Usuario o correo *', fr: 'Nom d\'utilisateur ou e-mail *', de: 'Benutzername oder E-Mail *' },
+      password: { en: 'Password', es: 'Contraseña', fr: 'Mot de passe', de: 'Passwort' },
+      signIn: { en: 'Sign in', es: 'Iniciar sesión', fr: 'Se connecter', de: 'Anmelden' },
+      continueGoogle: { en: 'Continue with Google', es: 'Continuar con Google', fr: 'Continuer avec Google', de: 'Mit Google fortfahren' },
+      continueApple: { en: 'Continue with Apple', es: 'Continuar con Apple', fr: 'Continuer avec Apple', de: 'Mit Apple fortfahren' },
+      createAccount: { en: 'Create account (Signup)', es: 'Crear cuenta (Registro)', fr: 'Créer un compte (Inscription)', de: 'Konto erstellen (Registrierung)' },
+      signupTitle: { en: 'Signup', es: 'Registro', fr: 'Inscription', de: 'Registrierung' },
+      signupSub: { en: 'Create your Driver account. Fields marked with * are required.', es: 'Crea tu cuenta de conductor. Los campos con * son obligatorios.', fr: 'Créez votre compte conducteur. Les champs * sont obligatoires.', de: 'Erstellen Sie Ihr Fahrerkonto. Mit * markierte Felder sind Pflichtfelder.' },
+      fullName: { en: 'Full name *', es: 'Nombre completo *', fr: 'Nom complet *', de: 'Vollständiger Name *' },
+      username: { en: 'Username *', es: 'Usuario *', fr: 'Nom d\'utilisateur *', de: 'Benutzername *' },
+      email: { en: 'Email *', es: 'Correo *', fr: 'E-mail *', de: 'E-Mail *' },
+      retypePassword: { en: 'Retype password *', es: 'Repetir contraseña *', fr: 'Ressaisir le mot de passe *', de: 'Passwort wiederholen *' },
+      createAccountBtn: { en: 'Create account', es: 'Crear cuenta', fr: 'Créer un compte', de: 'Konto erstellen' },
+      alreadyHaveAccount: { en: 'Already have an account? Login', es: '¿Ya tienes cuenta? Iniciar sesión', fr: 'Déjà un compte ? Connexion', de: 'Bereits ein Konto? Anmelden' },
+      navGroup: { en: 'Driver Mobile Application', es: 'Aplicación móvil del conductor', fr: 'Application mobile conducteur', de: 'Fahrer-App' },
+      navHome: { en: 'Home Dashboard', es: 'Inicio', fr: 'Tableau de bord', de: 'Startseite' },
+      navProfile: { en: 'Onboarding & Profile Setup', es: 'Perfil y configuración', fr: 'Profil et paramètres', de: 'Profil & Einrichtung' },
+      navMobility: { en: 'Mobility Score (VII)', es: 'Puntuación de movilidad (VII)', fr: 'Score mobilité (VII)', de: 'Mobilitäts-Score (VII)' },
+      navDrivingReports: { en: 'Driving Reports', es: 'Informes de conducción', fr: 'Rapports de conduite', de: 'Fahrberichte' },
+      navVehicleDetails: { en: 'Vehicle Details & Digital Twin', es: 'Vehículo y gemelo digital', fr: 'Véhicule et jumeau numérique', de: 'Fahrzeug & digitaler Zwilling' },
+      navVehicleHealth: { en: 'Vehicle Health Breakdown', es: 'Estado del vehículo', fr: 'État du véhicule', de: 'Fahrzeugzustand' },
+      navServiceHistory: { en: 'Service History Timeline', es: 'Historial de servicio', fr: 'Historique des services', de: 'Serviceverlauf' },
+      navPredictive: { en: 'Predictive Maintenance Alerts', es: 'Alertas de mantenimiento', fr: 'Alertes maintenance', de: 'Wartungsmeldungen' },
+      navAnalytics: { en: 'Driving Analytics & Risk', es: 'Análisis y riesgo', fr: 'Analyses et risque', de: 'Fahranalyse & Risiko' },
+      navTripHistory: { en: 'Trip History & Summary', es: 'Viajes y resumen', fr: 'Trajets et résumé', de: 'Fahrten & Zusammenfassung' },
+      navFuel: { en: 'Fuel Efficiency & Carbon', es: 'Combustible y carbono', fr: 'Carburant et carbone', de: 'Kraftstoff & CO₂' },
+      navInsurance: { en: 'Insurance Overview & Premium', es: 'Seguro y prima', fr: 'Assurance et prime', de: 'Versicherung & Prämie' },
+      navClaims: { en: 'Claims Upload & AI Damage', es: 'Siniestros y daños IA', fr: 'Sinistres et dommages IA', de: 'Schadensmeldung & KI' },
+      navClaimStatus: { en: 'Claim Status Tracker', es: 'Estado de reclamaciones', fr: 'Suivi des sinistres', de: 'Schadenstatus' },
+      navNearby: { en: 'Nearby Service Centers & Booking', es: 'Talleres y reserva', fr: 'Centres et réservation', de: 'Werkstätten & Buchung' },
+      navTechnician: { en: 'Technician Profile View', es: 'Perfil del técnico', fr: 'Profil du technicien', de: 'Technikerprofil' },
+      navLiveRepair: { en: 'Live Repair Tracking', es: 'Seguimiento de reparación', fr: 'Suivi réparation en direct', de: 'Live-Reparatur' },
+      navParking: { en: 'Parking Map & Booking', es: 'Aparcamiento y reserva', fr: 'Parking et réservation', de: 'Parken & Buchung' },
+      navEvCharging: { en: 'EV Charging & Usage', es: 'Carga y uso del VE', fr: 'Recharge et usage VE', de: 'E-Auto laden & Nutzung' },
+      navEmergency: { en: 'Emergency & Accident Detection', es: 'Emergencia y accidentes', fr: 'Urgence et accident', de: 'Notfall & Unfall' },
+      navRoadside: { en: 'Roadside Assistance', es: 'Asistencia en carretera', fr: 'Assistance routière', de: 'Pannenhilfe' },
+      navResale: { en: 'Resale Value Estimator', es: 'Valor de reventa', fr: 'Valeur de revente', de: 'Wiederverkaufswert' },
+      navLoan: { en: 'Loan & EMI Calculator', es: 'Préstamo y cuotas', fr: 'Crédit et mensualités', de: 'Kredit & Ratenrechner' },
+      navMarketplace: { en: 'Marketplace', es: 'Marketplace', fr: 'Marketplace', de: 'Marktplatz' },
+      navSettings: { en: 'Settings & Privacy', es: 'Ajustes y privacidad', fr: 'Paramètres et confidentialité', de: 'Einstellungen & Datenschutz' },
+      logout: { en: 'Logout', es: 'Cerrar sesión', fr: 'Déconnexion', de: 'Abmelden' },
+      welcomeBack: { en: 'Welcome back', es: 'Bienvenido de nuevo', fr: 'Bon retour', de: 'Willkommen zurück' },
+      welcomeSub: { en: 'Your mobility overview and quick snapshot.', es: 'Tu resumen de movilidad.', fr: 'Votre aperçu mobilité.', de: 'Ihre Mobilitätsübersicht.' },
+      viiLabel: { en: 'Vehicle Intelligence Index (VII)', es: 'Índice de inteligencia del vehículo (VII)', fr: 'Indice d\'intelligence véhicule (VII)', de: 'Fahrzeug-Intelligenz-Index (VII)' },
+      mobilityScoreOutOf: { en: 'Mobility score · Out of 1000', es: 'Puntuación · De 1000', fr: 'Score mobilité · Sur 1000', de: 'Mobilitäts-Score · Von 1000' },
+      vehicleHealth: { en: 'Vehicle Health', es: 'Salud del vehículo', fr: 'Santé du véhicule', de: 'Fahrzeugzustand' },
+      digitalTwinStatus: { en: 'Digital twin status', es: 'Estado del gemelo digital', fr: 'État du jumeau numérique', de: 'Digitaler Zwilling Status' },
+      recentActivity: { en: 'Recent Activity', es: 'Actividad reciente', fr: 'Activité récente', de: 'Letzte Aktivität' },
+      profileTitle: { en: 'Profile', es: 'Perfil', fr: 'Profil', de: 'Profil' },
+      licenseNumber: { en: 'License number *', es: 'Número de licencia *', fr: 'Numéro de permis *', de: 'Führerscheinnummer *' },
+      phoneLabel: { en: 'Phone *', es: 'Teléfono *', fr: 'Téléphone *', de: 'Telefon *' },
+      driverPrefs: { en: 'Driver preferences', es: 'Preferencias del conductor', fr: 'Préférences conducteur', de: 'Fahrereinstellungen' },
+      distanceUnits: { en: 'Distance units', es: 'Unidades de distancia', fr: 'Unités de distance', de: 'Entfernungseinheiten' },
+      languageLabel: { en: 'Language', es: 'Idioma', fr: 'Langue', de: 'Sprache' },
+      miles: { en: 'Miles (mi)', es: 'Millas (mi)', fr: 'Miles (mi)', de: 'Meilen (mi)' },
+      kilometers: { en: 'Kilometers (km)', es: 'Kilómetros (km)', fr: 'Kilomètres (km)', de: 'Kilometer (km)' },
+      langEn: { en: 'English', es: 'Inglés', fr: 'Anglais', de: 'Englisch' },
+      langEs: { en: 'Spanish', es: 'Español', fr: 'Espagnol', de: 'Spanisch' },
+      langFr: { en: 'French', es: 'Francés', fr: 'Français', de: 'Französisch' },
+      langDe: { en: 'German', es: 'Alemán', fr: 'Allemand', de: 'Deutsch' },
+      notifications: { en: 'Notifications', es: 'Notificaciones', fr: 'Notifications', de: 'Benachrichtigungen' },
+      emailNotifications: { en: 'Email notifications', es: 'Notificaciones por correo', fr: 'Notifications par e-mail', de: 'E-Mail-Benachrichtigungen' },
+      pushNotifications: { en: 'Push notifications', es: 'Notificaciones push', fr: 'Notifications push', de: 'Push-Benachrichtigungen' },
+      saveProfile: { en: 'Save profile', es: 'Guardar perfil', fr: 'Enregistrer le profil', de: 'Profil speichern' },
+      profileSaved: { en: 'Profile saved', es: 'Perfil guardado', fr: 'Profil enregistré', de: 'Profil gespeichert' },
+      profileSavedMsg: { en: 'Your profile has been updated successfully.', es: 'Tu perfil se ha actualizado correctamente.', fr: 'Votre profil a été mis à jour.', de: 'Ihr Profil wurde erfolgreich aktualisiert.' },
+      ok: { en: 'OK', es: 'Aceptar', fr: 'OK', de: 'OK' },
+      thisWeek: { en: 'This week', es: 'Esta semana', fr: 'Cette semaine', de: 'Diese Woche' },
+      thisMonth: { en: 'This month', es: 'Este mes', fr: 'Ce mois-ci', de: 'Diesen Monat' },
+      trips: { en: 'Trips', es: 'Viajes', fr: 'Trajets', de: 'Fahrten' },
+      distance: { en: 'Distance', es: 'Distancia', fr: 'Distance', de: 'Entfernung' },
+      driveTime: { en: 'Drive time', es: 'Tiempo de conducción', fr: 'Temps de conduite', de: 'Fahrzeit' },
+      fuelUsed: { en: 'Fuel used', es: 'Combustible usado', fr: 'Carburant utilisé', de: 'Kraftstoff verbraucht' },
+      recentTrips: { en: 'Recent trips', es: 'Viajes recientes', fr: 'Trajets récents', de: 'Letzte Fahrten' },
+      vehicleDetails: { en: 'Vehicle details', es: 'Datos del vehículo', fr: 'Détails du véhicule', de: 'Fahrzeugdetails' },
+      digitalTwin: { en: 'Digital Twin', es: 'Gemelo digital', fr: 'Jumeau numérique', de: 'Digitaler Zwilling' },
+      make: { en: 'Make', es: 'Marca', fr: 'Marque', de: 'Marke' },
+      model: { en: 'Model', es: 'Modelo', fr: 'Modèle', de: 'Modell' },
+      year: { en: 'Year', es: 'Año', fr: 'Année', de: 'Jahr' },
+      vin: { en: 'VIN', es: 'VIN', fr: 'VIN', de: 'FIN' },
+      odometer: { en: 'Odometer', es: 'Cuentakilómetros', fr: 'Compteur', de: 'Kilometerstand' },
+      fuelType: { en: 'Fuel type', es: 'Tipo de combustible', fr: 'Type de carburant', de: 'Kraftstoffart' },
+      color: { en: 'Color', es: 'Color', fr: 'Couleur', de: 'Farbe' },
+      licensePlate: { en: 'License plate', es: 'Matrícula', fr: 'Plaque', de: 'Kennzeichen' },
+      lastService: { en: 'Last service', es: 'Último servicio', fr: 'Dernier entretien', de: 'Letzte Wartung' },
+      mobilityScoreLabel: { en: 'Mobility Score (VII)', es: 'Puntuación de movilidad (VII)', fr: 'Score mobilité (VII)', de: 'Mobilitäts-Score (VII)' },
+      noRecentTrips: { en: 'No recent trips', es: 'Sin viajes recientes', fr: 'Aucun trajet récent', de: 'Keine letzten Fahrten' }
+    };
+    function getCurrentLang() {
+      try { var r = localStorage.getItem('autosphere_profile'); if (r) { var p = JSON.parse(r); var l = p.language; if (l === 'es' || l === 'fr' || l === 'de') return l; } } catch (_) {}
+      return 'en';
+    }
+    function t(key) { var lang = getCurrentLang(); return (TRANSLATIONS[key] && TRANSLATIONS[key][lang]) ? TRANSLATIONS[key][lang] : (TRANSLATIONS[key] ? TRANSLATIONS[key].en : key); }
+    function applyLanguage(lang) {
+      if (!lang || typeof lang !== 'string') lang = getCurrentLang();
+      var l = lang in { en: 1, es: 1, fr: 1, de: 1 } ? lang : 'en';
+      document.querySelectorAll('[data-i18n]').forEach(function(el) { var k = el.getAttribute('data-i18n'); if (!TRANSLATIONS[k] || !TRANSLATIONS[k][l]) return; var txt = TRANSLATIONS[k][l]; if (txt.indexOf(' *') !== -1) el.innerHTML = txt.replace(/\s*\*\s*$/, ' <span class="required">*</span>'); else el.textContent = txt; });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) { var k = el.getAttribute('data-i18n-placeholder'); if (TRANSLATIONS[k] && TRANSLATIONS[k][l]) el.placeholder = TRANSLATIONS[k][l]; });
+      var unitsSel = document.getElementById('profileUnits');
+      if (unitsSel && unitsSel.options.length >= 2) { unitsSel.options[0].text = (TRANSLATIONS.miles && TRANSLATIONS.miles[l]) ? TRANSLATIONS.miles[l] : 'Miles (mi)'; unitsSel.options[1].text = (TRANSLATIONS.kilometers && TRANSLATIONS.kilometers[l]) ? TRANSLATIONS.kilometers[l] : 'Kilometers (km)'; }
+      var langSel = document.getElementById('profileLanguage');
+      if (langSel && langSel.options.length >= 4) { langSel.options[0].text = (TRANSLATIONS.langEn && TRANSLATIONS.langEn[l]) ? TRANSLATIONS.langEn[l] : 'English'; langSel.options[1].text = (TRANSLATIONS.langEs && TRANSLATIONS.langEs[l]) ? TRANSLATIONS.langEs[l] : 'Spanish'; langSel.options[2].text = (TRANSLATIONS.langFr && TRANSLATIONS.langFr[l]) ? TRANSLATIONS.langFr[l] : 'French'; langSel.options[3].text = (TRANSLATIONS.langDe && TRANSLATIONS.langDe[l]) ? TRANSLATIONS.langDe[l] : 'German'; }
+    }
+    function getProfileUnits() {
+      try { var r = localStorage.getItem('autosphere_profile'); if (r) { var p = JSON.parse(r); if (p.units === 'km') return 'km'; } } catch (_) {}
+      return 'mi';
+    }
+    var DEFAULT_VEHICLE = { vehicleName: 'Primary Vehicle', mobilityScore: 870, healthPercent: 92, status: 'Good', lastService: '2025-02-15', make: 'Toyota', model: 'Camry', year: 2023, vin: '1HGBH41JXMN109186', odometerMi: 12450, odometerKm: 20035, fuelType: 'Gasoline', color: 'Silver', licensePlate: 'ABC 1234', vii: { health: 92, risk: 18, compliance: 95, environmental: 88, marketValue: 78 } };
     const THEME_KEY = 'autosphere_theme';
     function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
     function setTheme(theme) {
@@ -602,18 +897,76 @@
       if (topBar) topBar.style.display = 'flex';
       var logoutBtn = document.getElementById('topLogoutBtn');
       if (logoutBtn) logoutBtn.style.display = (id === 'app') ? '' : 'none';
+      var profileBtn = document.getElementById('topProfileBtn');
+      if (profileBtn) { if (id === 'app') { profileBtn.classList.remove('hidden'); profileBtn.style.display = ''; } else { profileBtn.classList.add('hidden'); profileBtn.style.display = 'none'; } }
     }
     (function setInitialTopBar() {
       var lb = document.getElementById('topLogoutBtn');
       if (lb) lb.style.display = 'none';
+      var pb = document.getElementById('topProfileBtn');
+      if (pb) { pb.classList.add('hidden'); pb.style.display = 'none'; }
     })();
     function showPanel(id) {
+      if (id === 'onboarding') loadProfile();
       document.querySelectorAll('.screen-panel').forEach(p => { p.classList.remove('active'); });
       document.querySelectorAll('.sidebar .nav-item').forEach(n => { n.classList.remove('active'); });
       const p = document.getElementById('panel-' + id);
       const n = document.querySelector('.sidebar .nav-item[data-screen="' + id + '"]');
       if (p) p.classList.add('active');
       if (n) n.classList.add('active');
+    }
+    var PROFILE_KEY = 'autosphere_profile';
+    function loadProfile() {
+      var raw = localStorage.getItem(PROFILE_KEY);
+      var data = {};
+      try { if (raw) data = JSON.parse(raw); } catch (_) {}
+      var el = function(id) { return document.getElementById(id); };
+      if (el('profileUsername')) el('profileUsername').value = data.username || '';
+      if (el('profileFullName')) el('profileFullName').value = data.fullName || '';
+      if (el('profileEmail')) el('profileEmail').value = data.email || '';
+      if (el('profileCountryCode')) el('profileCountryCode').value = data.countryCode || '+1';
+      if (el('profilePhone')) el('profilePhone').value = data.phone || '';
+      if (el('profileLicense')) el('profileLicense').value = data.license || '';
+      if (el('profileUnits')) el('profileUnits').value = data.units === 'km' ? 'km' : 'mi';
+      if (el('profileLanguage')) el('profileLanguage').value = data.language || 'en';
+      if (el('profileNotifyEmail')) el('profileNotifyEmail').checked = !!data.notifyEmail;
+      if (el('profileNotifyPush')) el('profileNotifyPush').checked = !!data.notifyPush;
+      var st = el('profileStatus'); if (st) { st.classList.add('hidden'); st.textContent = ''; }
+    }
+    function saveProfile() {
+      var el = function(id) { return document.getElementById(id); };
+      var username = (el('profileUsername') && el('profileUsername').value.trim()) || '';
+      var fullName = (el('profileFullName') && el('profileFullName').value.trim()) || '';
+      var email = (el('profileEmail') && el('profileEmail').value.trim()) || '';
+      var countryCode = (el('profileCountryCode') && el('profileCountryCode').value) || '+1';
+      var phone = (el('profilePhone') && el('profilePhone').value.trim()) || '';
+      var license = (el('profileLicense') && el('profileLicense').value.trim()) || '';
+      var statusEl = el('profileStatus');
+      function showError(msg) { if (statusEl) { statusEl.textContent = msg; statusEl.classList.remove('hidden'); } }
+      if (!username) { showError('Username is required.'); loadProfile(); return; }
+      if (!fullName) { showError('Full name is required.'); loadProfile(); return; }
+      if (!email) { showError('Email is required.'); loadProfile(); return; }
+      if (!phone) { showError('Phone number is required.'); loadProfile(); return; }
+      if (!license) { showError('License number is required.'); loadProfile(); return; }
+      var units = (el('profileUnits') && el('profileUnits').value === 'km') ? 'km' : 'mi';
+      var language = (el('profileLanguage') && el('profileLanguage').value) || 'en';
+      var notifyEmail = el('profileNotifyEmail') ? el('profileNotifyEmail').checked : false;
+      var notifyPush = el('profileNotifyPush') ? el('profileNotifyPush').checked : false;
+      var data = { username: username, fullName: fullName, email: email, countryCode: countryCode, phone: phone, license: license, units: units, language: language, notifyEmail: notifyEmail, notifyPush: notifyPush };
+      try { localStorage.setItem(PROFILE_KEY, JSON.stringify(data)); } catch (_) { showError('Could not save profile.'); return; }
+      if (statusEl) { statusEl.classList.add('hidden'); statusEl.textContent = ''; }
+      var overlay = document.getElementById('profileSavedOverlay');
+      if (overlay) { overlay.classList.add('show'); overlay.setAttribute('aria-hidden', 'false'); }
+      if (window.updateDrivingReportUI) updateDrivingReportUI(document.getElementById('drivingReportTabMonthly') && document.getElementById('drivingReportTabMonthly').classList.contains('active') ? 'monthly' : 'weekly');
+      if (window._lastVehicleData && el('vehicleOdometer')) {
+        var u = data.units === 'km' ? 'km' : 'mi';
+        el('vehicleOdometer').textContent = u === 'km' ? (window._lastVehicleData.odometerKm != null ? window._lastVehicleData.odometerKm.toLocaleString() + ' km' : '—') : (window._lastVehicleData.odometerMi != null ? window._lastVehicleData.odometerMi.toLocaleString() + ' mi' : '—');
+      }
+      applyLanguage(language);
+    }
+    function closeProfileSavedPopup() {
+      var overlay = document.getElementById('profileSavedOverlay');
+      if (overlay) { overlay.classList.remove('show'); overlay.setAttribute('aria-hidden', 'true'); }
     }
 
     function goFromSplash() {
@@ -661,12 +1014,15 @@
     document.getElementById('biometricBtn').onclick = function() { showView('app'); hide(document.getElementById('view-biometric')); initApp(); };
     document.getElementById('signupBtn').onclick = function() {
       var name = document.getElementById('signupName').value.trim();
+      var usernameEl = document.getElementById('signupUsername');
+      var username = usernameEl ? usernameEl.value.trim() : '';
       var email = document.getElementById('signupEmail').value.trim();
       var pwd = document.getElementById('signupPassword').value;
       var retype = document.getElementById('signupPasswordRetype').value;
       var errEl = document.getElementById('signupError');
       hide(errEl);
       if (!name) { errEl.textContent = 'Enter full name.'; errEl.classList.remove('hidden'); return; }
+      if (!username) { errEl.textContent = 'Enter username.'; errEl.classList.remove('hidden'); return; }
       if (!email) { errEl.textContent = 'Enter email.'; errEl.classList.remove('hidden'); return; }
       if (!pwd) { errEl.textContent = 'Enter password.'; errEl.classList.remove('hidden'); return; }
       if (!retype) { errEl.textContent = 'Retype password.'; errEl.classList.remove('hidden'); return; }
@@ -683,8 +1039,15 @@
     function continueWithGoogle() {
       window.location.href = (window.API || '') + '/auth/google';
     }
+    function continueWithApple() {
+      window.location.href = (window.API || '') + '/auth/apple';
+    }
     document.getElementById('loginGoogleBtn').onclick = continueWithGoogle;
     document.getElementById('signupGoogleBtn').onclick = continueWithGoogle;
+    var loginApple = document.getElementById('loginAppleBtn');
+    if (loginApple) loginApple.onclick = continueWithApple;
+    var signupApple = document.getElementById('signupAppleBtn');
+    if (signupApple) signupApple.onclick = continueWithApple;
 
     function initPasswordToggles() {
       document.querySelectorAll('.password-wrap').forEach(function(wrap) {
@@ -724,20 +1087,20 @@
       }
     };
     document.getElementById('loginBtn').onclick = async function() {
-      const email = document.getElementById('email').value.trim();
+      const usernameOrEmail = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const err = document.getElementById('loginError');
       hide(err);
-      if (!email) { err.textContent = 'Enter email.'; show(err); return; }
+      if (!usernameOrEmail) { err.textContent = 'Enter username or email.'; show(err); return; }
       if (!password) { err.textContent = 'Enter password.'; show(err); return; }
       try {
-        const r = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+        const r = await fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usernameOrEmail, password, email: usernameOrEmail }) });
         const text = await r.text();
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}
         if (!r.ok) throw new Error(data.error || text || 'Login failed');
         if (data.token) localStorage.setItem('autosphere_token', data.token);
-        localStorage.setItem('autosphere_email', email);
+        localStorage.setItem('autosphere_email', usernameOrEmail.indexOf('@') !== -1 ? usernameOrEmail : (localStorage.getItem('autosphere_profile') ? (function(){ try { var p = JSON.parse(localStorage.getItem('autosphere_profile')); return p.email || usernameOrEmail; } catch(_){ return usernameOrEmail; } })() : usernameOrEmail));
         hide(document.getElementById('view-login'));
         showView('app');
         initApp();
@@ -752,6 +1115,7 @@
       localStorage.removeItem('autosphere_email');
       document.getElementById('view-app').classList.add('hidden');
       showView('login');
+      applyLanguage(getCurrentLang());
     }
     document.getElementById('logoutBtn').onclick = doLogout;
     document.getElementById('topLogoutBtn').onclick = doLogout;
@@ -775,12 +1139,30 @@
       if (n < 50) bar.classList.add('danger'); else if (n < 75) bar.classList.add('warn');
     }
 
+    function updateDrivingReportUI(period) {
+      var tabW = document.getElementById('drivingReportTabWeekly');
+      var tabM = document.getElementById('drivingReportTabMonthly');
+      if (tabW) { tabW.classList.remove('active'); if (period === 'weekly') tabW.classList.add('active'); }
+      if (tabM) { tabM.classList.remove('active'); if (period === 'monthly') tabM.classList.add('active'); }
+      var reports = window._drivingReports || { weekly: { trips: 8, distanceMi: 142, distanceKm: 228.5, driveTimeMinutes: 320, fuelUsedGal: 5.2, fuelUsedL: 19.7 }, monthly: { trips: 34, distanceMi: 612, distanceKm: 984.9, driveTimeMinutes: 1380, fuelUsedGal: 22.1, fuelUsedL: 83.7 }, recentTrips: [ { date: '2026-03-07', label: 'Commute', distanceMi: 24, distanceKm: 38.6 }, { date: '2026-03-06', label: 'Errands', distanceMi: 12, distanceKm: 19.3 }, { date: '2026-03-05', label: 'Highway', distanceMi: 85, distanceKm: 136.8 } ] };
+      var block = period === 'monthly' ? reports.monthly : reports.weekly;
+      var units = getProfileUnits();
+      if (document.getElementById('reportTrips')) document.getElementById('reportTrips').textContent = block.trips != null ? block.trips : '—';
+      if (document.getElementById('reportDistance')) document.getElementById('reportDistance').textContent = units === 'km' ? (block.distanceKm != null ? block.distanceKm.toFixed(1) + ' km' : '—') : (block.distanceMi != null ? block.distanceMi.toFixed(1) + ' mi' : '—');
+      if (document.getElementById('reportDriveTime')) document.getElementById('reportDriveTime').textContent = block.driveTimeMinutes != null ? Math.floor(block.driveTimeMinutes / 60) + 'h ' + (block.driveTimeMinutes % 60) + 'm' : '—';
+      if (document.getElementById('reportFuel')) document.getElementById('reportFuel').textContent = units === 'km' ? (block.fuelUsedL != null ? block.fuelUsedL.toFixed(1) + ' L' : '—') : (block.fuelUsedGal != null ? block.fuelUsedGal.toFixed(1) + ' gal' : '—');
+      var list = document.getElementById('drivingReportRecentTrips');
+      if (list && reports.recentTrips && reports.recentTrips.length) {
+        list.innerHTML = reports.recentTrips.map(function(t) { var d = units === 'km' ? (t.distanceKm != null ? t.distanceKm.toFixed(1) + ' km' : '—') : (t.distanceMi != null ? t.distanceMi.toFixed(1) + ' mi' : '—'); return '<li style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span>' + (t.label || t.date) + ' · ' + (t.date || '') + '</span><span>' + d + '</span></li>'; }).join('');
+      } else if (list) list.innerHTML = '<li style="padding:10px 0;color:var(--muted)">' + (typeof t === 'function' ? t('noRecentTrips') : 'No recent trips') + '</li>';
+    }
+
     async function loadData() {
       try {
-        const r = await fetch(API + '/vehicles/1');
-        const text = await r.text();
-        let data = {};
-        try { data = JSON.parse(text); } catch (_) {}
+        var data = {};
+        try { var r = await fetch(API + '/vehicles/1'); var text = await r.text(); if (text) data = JSON.parse(text); } catch (_) {}
+        if (!data || Object.keys(data).length === 0) data = DEFAULT_VEHICLE;
+        else { data = Object.assign({}, DEFAULT_VEHICLE, data); if (data.vii && DEFAULT_VEHICLE.vii) data.vii = Object.assign({}, DEFAULT_VEHICLE.vii, data.vii); }
         const score = data.mobilityScore != null ? data.mobilityScore : null;
         const health = data.healthPercent != null ? data.healthPercent : null;
         if (document.getElementById('mobilityScoreVal')) document.getElementById('mobilityScoreVal').textContent = score != null ? score : '—';
@@ -791,6 +1173,17 @@
         if (document.getElementById('healthPercent')) document.getElementById('healthPercent').textContent = health != null ? health : '—';
         if (document.getElementById('vehicleStatus')) document.getElementById('vehicleStatus').textContent = data.status || '—';
         if (document.getElementById('lastService')) document.getElementById('lastService').textContent = data.lastService || '—';
+        if (document.getElementById('vehicleDetailsScore')) document.getElementById('vehicleDetailsScore').textContent = score != null ? score : '—';
+        var units = getProfileUnits();
+        if (document.getElementById('vehicleMake')) document.getElementById('vehicleMake').textContent = data.make || '—';
+        if (document.getElementById('vehicleModel')) document.getElementById('vehicleModel').textContent = data.model || '—';
+        if (document.getElementById('vehicleYear')) document.getElementById('vehicleYear').textContent = data.year != null ? data.year : '—';
+        if (document.getElementById('vehicleVin')) document.getElementById('vehicleVin').textContent = data.vin || '—';
+        if (document.getElementById('vehicleOdometer')) document.getElementById('vehicleOdometer').textContent = units === 'km' ? (data.odometerKm != null ? data.odometerKm.toLocaleString() + ' km' : '—') : (data.odometerMi != null ? data.odometerMi.toLocaleString() + ' mi' : '—');
+        if (document.getElementById('vehicleFuelType')) document.getElementById('vehicleFuelType').textContent = data.fuelType || '—';
+        if (document.getElementById('vehicleColor')) document.getElementById('vehicleColor').textContent = data.color || '—';
+        if (document.getElementById('vehicleLicensePlate')) document.getElementById('vehicleLicensePlate').textContent = data.licensePlate || '—';
+        window._lastVehicleData = data;
         setHealthBar(health);
         if (data.vii && document.getElementById('viiGrid')) {
           const v = data.vii;
@@ -810,6 +1203,8 @@
         const items = data.recentActivity || [];
         const homeAct = document.getElementById('homeActivity');
         if (homeAct) homeAct.innerHTML = items.length ? items.map(a => '<li><span>' + (a.label || '') + '</span><span class="time">' + (a.time || '') + '</span></li>').join('') : '<li>No activity</li>';
+        if (data.drivingReports) window._drivingReports = data.drivingReports;
+        updateDrivingReportUI('weekly');
       } catch (_) {}
       try {
         const r = await fetch(API + '/api/driver-companion');
@@ -843,8 +1238,23 @@
 
     function initApp() {
       if (document.getElementById('userEmail')) document.getElementById('userEmail').textContent = localStorage.getItem('autosphere_email') || 'Driver';
+      var profileBtn = document.getElementById('topProfileBtn');
+      if (profileBtn) profileBtn.onclick = function() { showPanel('onboarding'); };
+      loadProfile();
+      applyLanguage(getCurrentLang());
+      var saveBtn = document.getElementById('profileSaveBtn');
+      if (saveBtn) saveBtn.onclick = saveProfile;
+      var okBtn = document.getElementById('profileSavedOkBtn');
+      if (okBtn) okBtn.onclick = closeProfileSavedPopup;
+      var overlay = document.getElementById('profileSavedOverlay');
+      if (overlay) overlay.onclick = function(e) { if (e.target === overlay) closeProfileSavedPopup(); };
+      var tabW = document.getElementById('drivingReportTabWeekly');
+      var tabM = document.getElementById('drivingReportTabMonthly');
+      if (tabW) tabW.onclick = function() { updateDrivingReportUI('weekly'); };
+      if (tabM) tabM.onclick = function() { updateDrivingReportUI('monthly'); };
       loadData();
     }
+    applyLanguage(getCurrentLang());
   </script>
 </body>
 </html>
