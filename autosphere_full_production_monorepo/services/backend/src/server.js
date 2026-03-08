@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const jwt = require('jsonwebtoken');
@@ -40,7 +42,8 @@ app.get('/auth/google', (req, res) => {
   }
   const redirectUri = `${BASE_URL.replace(/\/$/, '')}/auth/google/callback`;
   const scope = encodeURIComponent('openid email profile');
-  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`;
+  // prompt=select_account shows the device's signed-in Google accounts (account chooser), like GitHub sign-in
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&prompt=select_account`;
   res.redirect(302, url);
 });
 app.get('/auth/google/callback', (req, res) => {
@@ -99,9 +102,13 @@ app.get('/api/dashboard', (req, res) => {
     mobilityScore: 870,
     vehicle: { id: 1, name: 'Primary Vehicle', health: 92, status: 'Good' },
     predictiveMaintenanceAlerts: [
-      { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule in 60 days', dueIn: '60 days' },
-      { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days', dueIn: '30 days' },
+      { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule service in 60 days.', dueIn: '60 days', riskLevel: 'low' },
+      { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days.', dueIn: '30 days', riskLevel: 'low' },
+      { id: 3, severity: 'medium', message: 'Tire tread depth approaching minimum – consider replacement within 90 days.', dueIn: '90 days', riskLevel: 'medium' },
+      { id: 4, severity: 'low', message: 'Cabin air filter may need replacement at next service.', dueIn: '45 days', riskLevel: 'low' },
+      { id: 5, severity: 'info', message: 'Battery health good; next test at 18 months.', dueIn: '6 months', riskLevel: 'low' },
     ],
+    maintenanceRiskSummary: { riskScore: 3.2, riskLevel: 'Low', highCount: 0, mediumCount: 1, lowCount: 4 },
     recentActivity: [
       { id: 1, type: 'trip', label: 'Trip completed', time: '2 hours ago' },
       { id: 2, type: 'score', label: 'Vehicle Intelligence Index (VII) updated', time: '5 hours ago' },

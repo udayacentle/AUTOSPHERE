@@ -101,7 +101,7 @@
     .auth-card { background: var(--surface); border-radius: 16px; padding: 28px; max-width: 400px; width: 100%; border: 1px solid var(--border); }
     .auth-card h1 { margin: 0 0 6px; font-size: 1.4rem; color: var(--primary); }
     .auth-card .sub { color: var(--muted); margin-bottom: 20px; font-size: 0.9rem; }
-    .auth-card .field-label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text); }
+    .auth-card .field-label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text); text-align: left; }
     .auth-card .field-label .required { color: var(--danger); margin-left: 2px; }
     .auth-card .password-wrap { position: relative; margin-bottom: 10px; }
     .auth-card .password-wrap input { margin-bottom: 0; padding-right: 32px; box-sizing: border-box; }
@@ -147,15 +147,18 @@
     .sidebar .user { font-size: 0.75rem; color: var(--muted); padding: 0 16px 8px; }
     .sidebar nav { max-height: calc(100vh - 120px); overflow-y: auto; }
     .sidebar .nav-group { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 16px 4px; }
-    .sidebar .nav-item { display: block; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 0.85rem; border-radius: 6px; margin: 2px 8px; }
+    .sidebar .nav-item { display: flex; align-items: center; padding: 8px 16px; color: var(--text); text-decoration: none; font-size: 0.85rem; border-radius: 6px; margin: 2px 8px; gap: 10px; }
     .sidebar .nav-item:hover { background: var(--surface-hover); }
     .sidebar .nav-item.active { background: var(--primary); color: #fff; }
-    .sidebar .btn-logout { margin: 12px 16px 0; padding: 8px 12px; width: calc(100% - 32px); background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+    .sidebar .nav-item .nav-icon { font-size: 1.15rem; line-height: 1; flex-shrink: 0; }
+    .sidebar .btn-logout { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 12px 16px 0; padding: 8px 12px; width: calc(100% - 32px); background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
     .sidebar .btn-logout:hover { background: var(--surface-hover); color: var(--text); }
+    .sidebar .btn-logout .nav-icon { font-size: 1.1rem; }
     @media (max-width: 768px) {
       .sidebar { width: 56px; padding: 8px 0; }
-      .sidebar .logo, .sidebar .user, .sidebar .nav-group, .sidebar .nav-item span { display: none; }
-      .sidebar .nav-item { padding: 10px; text-align: center; }
+      .sidebar .logo, .sidebar .user, .sidebar .nav-group, .sidebar .nav-item .nav-item-text { display: none; }
+      .sidebar .nav-item .nav-icon { display: inline-block; margin: 0; }
+      .sidebar .nav-item { padding: 10px; justify-content: center; }
     }
 
     .main-content { flex: 1; padding: 20px; overflow-y: auto; }
@@ -181,6 +184,28 @@
     .alert-list { list-style: none; padding: 0; margin: 0; }
     .alert-list li { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
     .alert-list li:last-child { border-bottom: none; }
+    .maintenance-alert { padding: 14px 16px; border-radius: 10px; border-left: 4px solid var(--border); background: var(--bg); margin-bottom: 12px; }
+    .maintenance-alert:last-child { margin-bottom: 0; }
+    .maintenance-alert.low, .maintenance-alert.info { border-left-color: var(--primary); }
+    .maintenance-alert.medium { border-left-color: var(--warn); }
+    .maintenance-alert.high { border-left-color: var(--danger); }
+    .maintenance-alert .alert-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+    .maintenance-alert .severity { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 6px; }
+    .maintenance-alert .severity.low, .maintenance-alert .severity.info { background: rgba(14, 165, 233, 0.2); color: var(--primary); }
+    .maintenance-alert .severity.medium { background: rgba(234, 179, 8, 0.2); color: var(--warn); }
+    .maintenance-alert .severity.high { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .maintenance-alert .due { font-size: 0.8rem; color: var(--muted); }
+    .maintenance-alert .message { font-size: 0.95rem; color: var(--text); margin: 0; line-height: 1.4; }
+    .maintenance-alert .risk-badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+    .maintenance-alert .risk-badge.low { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .maintenance-alert .risk-badge.medium { background: rgba(234, 179, 8, 0.2); color: var(--warn); }
+    .maintenance-alert .risk-badge.high { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .risk-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .risk-overview .risk-kpi { background: var(--bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border); text-align: center; }
+    .risk-overview .risk-kpi .value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .risk-overview .risk-kpi .value.high { color: var(--danger); }
+    .risk-overview .risk-kpi .value.medium { color: var(--warn); }
+    .risk-overview .risk-kpi .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
     .activity-list { list-style: none; padding: 0; margin: 0; }
     .activity-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
     .activity-list .time { color: var(--muted); font-size: 0.75rem; }
@@ -188,6 +213,10 @@
     .card button { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: 600; margin-bottom: 0; }
     .card button:hover { background: var(--primary-hover); }
     .placeholder { padding: 24px; background: var(--bg); border-radius: 10px; border: 1px dashed var(--border); color: var(--muted); text-align: center; font-size: 0.9rem; }
+    .sample-list { list-style: none; padding: 0; margin: 0; }
+    .sample-list li { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .sample-list li:last-child { border-bottom: none; }
+    .sample-list .muted { font-size: 0.85rem; color: var(--muted); }
     .footer-app { text-align: center; color: var(--muted); font-size: 0.7rem; margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); }
 
     /* Home Dashboard – enhanced layout */
@@ -254,6 +283,13 @@
     .report-tab { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.9rem; }
     .report-tab:hover { background: var(--surface-hover); }
     .report-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .service-timeline { list-style: none; padding: 0; margin: 0; }
+    .service-timeline li { padding: 14px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 80px 1fr; gap: 12px; align-items: start; font-size: 0.95rem; }
+    .service-timeline li:last-child { border-bottom: none; }
+    .service-timeline .date { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+    .service-timeline .title { font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .service-timeline .desc { font-size: 0.85rem; color: var(--muted); margin: 0; }
+    .service-timeline .mileage { font-size: 0.8rem; color: var(--primary); margin-top: 4px; }
     .profile-form .field-label { display: block; margin-bottom: 4px; font-size: 0.85rem; color: var(--text); }
     .profile-form .field-label .required { color: var(--danger); margin-left: 2px; }
     .profile-form input, .profile-form select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 1rem; margin-bottom: 12px; box-sizing: border-box; }
@@ -388,32 +424,32 @@
         <div class="user" id="userEmail">Driver</div>
         <nav>
           <div class="nav-group" data-i18n="navGroup">Driver Mobile Application</div>
-          <a href="#" class="nav-item active" data-screen="home"><span data-i18n="navHome">Home Dashboard</span></a>
-          <a href="#" class="nav-item" data-screen="mobilityScore"><span data-i18n="navMobility">Mobility Score (VII)</span></a>
-          <a href="#" class="nav-item" data-screen="drivingReports"><span data-i18n="navDrivingReports">Driving Reports</span></a>
-          <a href="#" class="nav-item" data-screen="vehicleDetails"><span data-i18n="navVehicleDetails">Vehicle Details & Digital Twin</span></a>
-          <a href="#" class="nav-item" data-screen="vehicleHealth"><span data-i18n="navVehicleHealth">Vehicle Health Breakdown</span></a>
-          <a href="#" class="nav-item" data-screen="serviceHistory"><span data-i18n="navServiceHistory">Service History Timeline</span></a>
-          <a href="#" class="nav-item" data-screen="predictiveMaintenance"><span data-i18n="navPredictive">Predictive Maintenance Alerts</span></a>
-          <a href="#" class="nav-item" data-screen="drivingAnalytics"><span data-i18n="navAnalytics">Driving Analytics & Risk</span></a>
-          <a href="#" class="nav-item" data-screen="tripHistory"><span data-i18n="navTripHistory">Trip History & Summary</span></a>
-          <a href="#" class="nav-item" data-screen="fuelCarbon"><span data-i18n="navFuel">Fuel Efficiency & Carbon</span></a>
-          <a href="#" class="nav-item" data-screen="insuranceOverview"><span data-i18n="navInsurance">Insurance Overview & Premium</span></a>
-          <a href="#" class="nav-item" data-screen="claimsUpload"><span data-i18n="navClaims">Claims Upload & AI Damage</span></a>
-          <a href="#" class="nav-item" data-screen="claimStatus"><span data-i18n="navClaimStatus">Claim Status Tracker</span></a>
-          <a href="#" class="nav-item" data-screen="nearbyServices"><span data-i18n="navNearby">Nearby Service Centers & Booking</span></a>
-          <a href="#" class="nav-item" data-screen="technicianProfile"><span data-i18n="navTechnician">Technician Profile View</span></a>
-          <a href="#" class="nav-item" data-screen="liveRepair"><span data-i18n="navLiveRepair">Live Repair Tracking</span></a>
-          <a href="#" class="nav-item" data-screen="parking"><span data-i18n="navParking">Parking Map & Booking</span></a>
-          <a href="#" class="nav-item" data-screen="evCharging"><span data-i18n="navEvCharging">EV Charging & Usage</span></a>
-          <a href="#" class="nav-item" data-screen="emergency"><span data-i18n="navEmergency">Emergency & Accident Detection</span></a>
-          <a href="#" class="nav-item" data-screen="roadside"><span data-i18n="navRoadside">Roadside Assistance</span></a>
-          <a href="#" class="nav-item" data-screen="resale"><span data-i18n="navResale">Resale Value Estimator</span></a>
-          <a href="#" class="nav-item" data-screen="loanCalculator"><span data-i18n="navLoan">Loan & EMI Calculator</span></a>
-          <a href="#" class="nav-item" data-screen="marketplace"><span data-i18n="navMarketplace">Marketplace</span></a>
-          <a href="#" class="nav-item" data-screen="settings"><span data-i18n="navSettings">Settings & Privacy</span></a>
+          <a href="#" class="nav-item active" data-screen="home"><span class="nav-icon" aria-hidden="true">🏠</span><span class="nav-item-text" data-i18n="navHome">Home Dashboard</span></a>
+          <a href="#" class="nav-item" data-screen="mobilityScore"><span class="nav-icon" aria-hidden="true">📊</span><span class="nav-item-text" data-i18n="navMobility">Mobility Score (VII)</span></a>
+          <a href="#" class="nav-item" data-screen="drivingReports"><span class="nav-icon" aria-hidden="true">📋</span><span class="nav-item-text" data-i18n="navDrivingReports">Driving Reports</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleDetails"><span class="nav-icon" aria-hidden="true">🚗</span><span class="nav-item-text" data-i18n="navVehicleDetails">Vehicle Details & Digital Twin</span></a>
+          <a href="#" class="nav-item" data-screen="vehicleHealth"><span class="nav-icon" aria-hidden="true">💚</span><span class="nav-item-text" data-i18n="navVehicleHealth">Vehicle Health Breakdown</span></a>
+          <a href="#" class="nav-item" data-screen="serviceHistory"><span class="nav-icon" aria-hidden="true">📅</span><span class="nav-item-text" data-i18n="navServiceHistory">Service History Timeline</span></a>
+          <a href="#" class="nav-item" data-screen="predictiveMaintenance"><span class="nav-icon" aria-hidden="true">⚠️</span><span class="nav-item-text" data-i18n="navPredictive">Predictive Maintenance Alerts</span></a>
+          <a href="#" class="nav-item" data-screen="drivingAnalytics"><span class="nav-icon" aria-hidden="true">📈</span><span class="nav-item-text" data-i18n="navAnalytics">Driving Analytics & Risk</span></a>
+          <a href="#" class="nav-item" data-screen="tripHistory"><span class="nav-icon" aria-hidden="true">🛣️</span><span class="nav-item-text" data-i18n="navTripHistory">Trip History & Summary</span></a>
+          <a href="#" class="nav-item" data-screen="fuelCarbon"><span class="nav-icon" aria-hidden="true">⛽</span><span class="nav-item-text" data-i18n="navFuel">Fuel Efficiency & Carbon</span></a>
+          <a href="#" class="nav-item" data-screen="insuranceOverview"><span class="nav-icon" aria-hidden="true">🛡️</span><span class="nav-item-text" data-i18n="navInsurance">Insurance Overview & Premium</span></a>
+          <a href="#" class="nav-item" data-screen="claimsUpload"><span class="nav-icon" aria-hidden="true">📤</span><span class="nav-item-text" data-i18n="navClaims">Claims Upload & AI Damage</span></a>
+          <a href="#" class="nav-item" data-screen="claimStatus"><span class="nav-icon" aria-hidden="true">📋</span><span class="nav-item-text" data-i18n="navClaimStatus">Claim Status Tracker</span></a>
+          <a href="#" class="nav-item" data-screen="nearbyServices"><span class="nav-icon" aria-hidden="true">📍</span><span class="nav-item-text" data-i18n="navNearby">Nearby Service Centers & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="technicianProfile"><span class="nav-icon" aria-hidden="true">👷</span><span class="nav-item-text" data-i18n="navTechnician">Technician Profile View</span></a>
+          <a href="#" class="nav-item" data-screen="liveRepair"><span class="nav-icon" aria-hidden="true">🔧</span><span class="nav-item-text" data-i18n="navLiveRepair">Live Repair Tracking</span></a>
+          <a href="#" class="nav-item" data-screen="parking"><span class="nav-icon" aria-hidden="true">🅿️</span><span class="nav-item-text" data-i18n="navParking">Parking Map & Booking</span></a>
+          <a href="#" class="nav-item" data-screen="evCharging"><span class="nav-icon" aria-hidden="true">🔌</span><span class="nav-item-text" data-i18n="navEvCharging">EV Charging & Usage</span></a>
+          <a href="#" class="nav-item" data-screen="emergency"><span class="nav-icon" aria-hidden="true">🚨</span><span class="nav-item-text" data-i18n="navEmergency">Emergency & Accident Detection</span></a>
+          <a href="#" class="nav-item" data-screen="roadside"><span class="nav-icon" aria-hidden="true">🛟</span><span class="nav-item-text" data-i18n="navRoadside">Roadside Assistance</span></a>
+          <a href="#" class="nav-item" data-screen="resale"><span class="nav-icon" aria-hidden="true">💰</span><span class="nav-item-text" data-i18n="navResale">Resale Value Estimator</span></a>
+          <a href="#" class="nav-item" data-screen="loanCalculator"><span class="nav-icon" aria-hidden="true">🧮</span><span class="nav-item-text" data-i18n="navLoan">Loan & EMI Calculator</span></a>
+          <a href="#" class="nav-item" data-screen="marketplace"><span class="nav-icon" aria-hidden="true">🛒</span><span class="nav-item-text" data-i18n="navMarketplace">Marketplace</span></a>
+          <a href="#" class="nav-item" data-screen="settings"><span class="nav-icon" aria-hidden="true">⚙️</span><span class="nav-item-text" data-i18n="navSettings">Settings & Privacy</span></a>
         </nav>
-        <button type="button" class="btn-logout" id="logoutBtn" data-i18n="logout">Logout</button>
+        <button type="button" class="btn-logout" id="logoutBtn"><span class="nav-icon" aria-hidden="true">🚪</span><span data-i18n="logout">Logout</span></button>
       </aside>
       <main class="main-content">
         <!-- Home Dashboard -->
@@ -626,33 +662,61 @@
         <!-- Service History Timeline -->
         <div id="panel-serviceHistory" class="screen-panel">
           <h2 class="screen-title">Service History Timeline</h2>
-          <div class="placeholder">Service history timeline · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Past services</p>
+            <ul class="service-timeline" id="serviceHistoryList"></ul>
+          </div>
         </div>
 
-        <!-- Predictive Maintenance Alerts -->
+        <!-- Predictive Maintenance Alerts & Risks -->
         <div id="panel-predictiveMaintenance" class="screen-panel">
-          <h2 class="screen-title">Predictive Maintenance Alerts</h2>
+          <h2 class="screen-title">Predictive Maintenance Alerts & Risks</h2>
           <div class="card">
-            <ul class="alert-list" id="maintenanceAlerts"></ul>
+            <p class="card-title">Risk overview</p>
+            <div class="risk-overview" id="maintenanceRiskOverview"></div>
+          </div>
+          <div class="card">
+            <p class="card-title">Active alerts</p>
+            <div id="maintenanceAlertsList"></div>
           </div>
         </div>
 
         <!-- Driving Analytics & Risk Exposure -->
         <div id="panel-drivingAnalytics" class="screen-panel">
           <h2 class="screen-title">Driving Analytics & Risk Exposure</h2>
-          <div class="placeholder">Driving analytics and risk exposure · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Driving score</span><span class="muted">85 / 100</span></li>
+              <li><span>Hard braking events (7 days)</span><span class="muted">2</span></li>
+              <li><span>Rapid acceleration</span><span class="muted">4</span></li>
+              <li><span>Night driving %</span><span class="muted">12%</span></li>
+              <li><span>Risk exposure index</span><span class="muted">Low</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Trip History & Trip Summary -->
         <div id="panel-tripHistory" class="screen-panel">
           <h2 class="screen-title">Trip History & Trip Summary</h2>
-          <div class="placeholder">Trip history and trip summary · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list" id="tripHistoryList"></ul>
+          </div>
         </div>
 
         <!-- Fuel Efficiency & Carbon Tracker -->
         <div id="panel-fuelCarbon" class="screen-panel">
           <h2 class="screen-title">Fuel Efficiency & Carbon Tracker</h2>
-          <div class="placeholder">Fuel efficiency and carbon tracker · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Avg fuel economy</span><span class="muted">28.4 mpg</span></li>
+              <li><span>This month (est.)</span><span class="muted">22.1 gal</span></li>
+              <li><span>CO₂ (month)</span><span class="muted">~198 kg</span></li>
+              <li><span>Trend</span><span class="muted">+2% vs last month</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Insurance Overview & Premium Calculator -->
@@ -675,55 +739,114 @@
         <!-- Claims Upload & AI Damage Assessment -->
         <div id="panel-claimsUpload" class="screen-panel">
           <h2 class="screen-title">Claims Upload & AI Damage Assessment</h2>
-          <div class="placeholder">Upload claim documents and AI damage assessment · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <p class="kpi-label">Upload photos or documents for AI damage assessment. Sample entries below.</p>
+            <ul class="sample-list">
+              <li><span>Claim #CL-2026-001</span><span class="muted">Uploaded · Pending review</span></li>
+              <li><span>Claim #CL-2025-089</span><span class="muted">AI assessed · $1,240 est.</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Claim Status Tracker -->
         <div id="panel-claimStatus" class="screen-panel">
           <h2 class="screen-title">Claim Status Tracker</h2>
-          <div class="placeholder">Track claim status · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>CL-2026-001</span><span class="muted">Submitted</span></li>
+              <li><span>CL-2025-089</span><span class="muted">In review</span></li>
+              <li><span>CL-2025-076</span><span class="muted">Approved · Paid</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Nearby Service Centers & Booking -->
         <div id="panel-nearbyServices" class="screen-panel">
           <h2 class="screen-title">Nearby Service Centers & Booking</h2>
-          <div class="placeholder">Find and book nearby service centers · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>AutoCare Downtown</span><span class="muted">1.2 mi · 4.6 ★</span></li>
+              <li><span>QuickLube Central</span><span class="muted">2.8 mi · 4.4 ★</span></li>
+              <li><span>Dealer Service East</span><span class="muted">4.1 mi · 4.8 ★</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Technician Profile View -->
         <div id="panel-technicianProfile" class="screen-panel">
           <h2 class="screen-title">Technician Profile View</h2>
-          <div class="placeholder">Technician profile and ratings · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Alex M.</span><span class="muted">4.8 ★ · 320 jobs</span></li>
+              <li><span>Specialty</span><span class="muted">Brakes & suspension</span></li>
+              <li><span>Next available</span><span class="muted">Mar 12, 10:00 AM</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Live Repair Tracking -->
         <div id="panel-liveRepair" class="screen-panel">
           <h2 class="screen-title">Live Repair Tracking</h2>
-          <div class="placeholder">Live repair tracking · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Current job</span><span class="muted">None active</span></li>
+              <li><span>Last repair</span><span class="muted">Oil change · Mar 1, 2026</span></li>
+              <li><span>Estimated completion</span><span class="muted">—</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Parking Map & Booking -->
         <div id="panel-parking" class="screen-panel">
           <h2 class="screen-title">Parking Map & Booking</h2>
-          <div class="placeholder">Parking map and booking · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Central Garage A</span><span class="muted">$4/hr · 12 spots</span></li>
+              <li><span>Street Zone 5</span><span class="muted">$2.50/hr</span></li>
+              <li><span>Mall West Lot</span><span class="muted">$3/hr · 45 spots</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- EV Charging Booking & Usage Analytics -->
         <div id="panel-evCharging" class="screen-panel">
           <h2 class="screen-title">EV Charging Booking & Usage Analytics</h2>
-          <div class="placeholder">EV charging booking and usage analytics · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list" id="evChargingList"></ul>
+          </div>
         </div>
 
         <!-- Emergency & Accident Detection -->
         <div id="panel-emergency" class="screen-panel">
           <h2 class="screen-title">Emergency & Accident Detection</h2>
-          <div class="placeholder">Emergency and accident detection · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Emergency contacts</span><span class="muted">3 saved</span></li>
+              <li><span>Last triggered</span><span class="muted">Never</span></li>
+              <li><span>Auto-call 911</span><span class="muted">Enabled</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Roadside Assistance -->
         <div id="panel-roadside" class="screen-panel">
           <h2 class="screen-title">Roadside Assistance</h2>
-          <div class="placeholder">Roadside assistance · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Plan</span><span class="muted">Premium · 4 calls/year</span></li>
+              <li><span>Last use</span><span class="muted">Dec 2025 – Towing</span></li>
+              <li><span>Request help</span><span class="muted">Tap to call</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Resale Value Estimator -->
@@ -732,26 +855,58 @@
           <div class="card">
             <p class="card-title">Estimated resale value</p>
             <p id="resaleValue" class="kpi-value primary">—</p>
-            <p class="kpi-label">Trend: <span id="resaleTrend">—</span></p>
+            <p class="kpi-label">Trend: <span id="resaleTrend">—</span> · Last updated: <span id="resaleLastUpdated">—</span></p>
+          </div>
+          <div class="card">
+            <p class="card-title">Value factors</p>
+            <ul class="sample-list">
+              <li><span>Vehicle condition</span><span class="muted">Good</span></li>
+              <li><span>Mileage impact</span><span class="muted">Within range</span></li>
+              <li><span>Market trend</span><span class="muted">Stable</span></li>
+              <li><span>Comparable sales</span><span class="muted">3–5 in your area</span></li>
+            </ul>
           </div>
         </div>
 
         <!-- Loan & EMI Calculator -->
         <div id="panel-loanCalculator" class="screen-panel">
           <h2 class="screen-title">Loan & EMI Calculator</h2>
-          <div class="placeholder">Loan and EMI calculator · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Loan amount</span><span class="muted">$25,000</span></li>
+              <li><span>Term</span><span class="muted">60 months</span></li>
+              <li><span>Rate (APR)</span><span class="muted">6.5%</span></li>
+              <li><span>Est. EMI</span><span class="muted">$489/mo</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Marketplace -->
         <div id="panel-marketplace" class="screen-panel">
           <h2 class="screen-title">Marketplace</h2>
-          <div class="placeholder">Marketplace · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Accessories</span><span class="muted">Floor mats, cargo liner</span></li>
+              <li><span>Parts</span><span class="muted">OEM filters, wipers</span></li>
+              <li><span>Offers</span><span class="muted">10% off first order</span></li>
+            </ul>
+          </div>
         </div>
 
         <!-- Settings & Privacy Controls -->
         <div id="panel-settings" class="screen-panel">
           <h2 class="screen-title">Settings & Privacy Controls</h2>
-          <div class="placeholder">Settings and privacy controls · Per Complete Screen Inventory</div>
+          <div class="card">
+            <p class="card-title">Temporary data</p>
+            <ul class="sample-list">
+              <li><span>Notifications</span><span class="muted">On</span></li>
+              <li><span>Location sharing</span><span class="muted">While using app</span></li>
+              <li><span>Data sharing (analytics)</span><span class="muted">Optional</span></li>
+              <li><span>Privacy policy</span><span class="muted">View</span></li>
+            </ul>
+          </div>
         </div>
 
         <p class="footer-app">AutoSphere AI – Complete Screen Inventory · Driver Mobile Application · Feb 2026</p>
@@ -962,6 +1117,9 @@
         el('vehicleOdometer').textContent = u === 'km' ? (window._lastVehicleData.odometerKm != null ? window._lastVehicleData.odometerKm.toLocaleString() + ' km' : '—') : (window._lastVehicleData.odometerMi != null ? window._lastVehicleData.odometerMi.toLocaleString() + ' mi' : '—');
       }
       applyLanguage(language);
+      if (window.updateServiceHistoryUI) updateServiceHistoryUI();
+      if (window.updateTripHistoryUI) updateTripHistoryUI();
+      if (window.updateEvChargingUI) updateEvChargingUI();
     }
     function closeProfileSavedPopup() {
       var overlay = document.getElementById('profileSavedOverlay');
@@ -1156,6 +1314,95 @@
       } else if (list) list.innerHTML = '<li style="padding:10px 0;color:var(--muted)">' + (typeof t === 'function' ? t('noRecentTrips') : 'No recent trips') + '</li>';
     }
 
+    var SAMPLE_TRIP_HISTORY = [
+      { date: 'Mar 7', label: 'Commute', distanceMi: 24, distanceKm: 38.6, durationMin: 42 },
+      { date: 'Mar 6', label: 'Errands', distanceMi: 12, distanceKm: 19.3, durationMin: 28 },
+      { date: 'Mar 5', label: 'Highway', distanceMi: 85, distanceKm: 136.8, durationMin: 80 },
+      { date: 'Mar 4', label: 'City', distanceMi: 8, distanceKm: 12.9, durationMin: 35 },
+      { date: 'Mar 3', label: 'Weekend', distanceMi: 45, distanceKm: 72.4, durationMin: 58 }
+    ];
+    function updateTripHistoryUI() {
+      var list = document.getElementById('tripHistoryList');
+      if (!list) return;
+      var units = getProfileUnits();
+      var trips = window._tripHistory || SAMPLE_TRIP_HISTORY;
+      list.innerHTML = trips.map(function(t) {
+        var dist = units === 'km' ? (t.distanceKm != null ? t.distanceKm.toFixed(1) + ' km' : '—') : (t.distanceMi != null ? t.distanceMi + ' mi' : '—');
+        var dur = t.durationMin != null ? (t.durationMin >= 60 ? Math.floor(t.durationMin / 60) + 'h ' + (t.durationMin % 60) + 'm' : t.durationMin + ' min') : '—';
+        return '<li><span>' + (t.date || '') + ' – ' + (t.label || '') + '</span><span class="muted">' + dist + ' · ' + dur + '</span></li>';
+      }).join('');
+    }
+    var SAMPLE_EV_CHARGING = [
+      { name: 'ChargePoint Station #8821', distanceMi: 0.4, distanceKm: 0.64, status: 'Available' },
+      { name: 'Electrify America', distanceMi: 1.1, distanceKm: 1.77, status: '2 in use' },
+      { name: 'Monthly usage (est.)', kWh: 85 }
+    ];
+    function updateEvChargingUI() {
+      var list = document.getElementById('evChargingList');
+      if (!list) return;
+      var units = getProfileUnits();
+      var items = window._evCharging || SAMPLE_EV_CHARGING;
+      list.innerHTML = items.map(function(item) {
+        if (item.kWh != null) return '<li><span>' + (item.name || '') + '</span><span class="muted">~' + item.kWh + ' kWh</span></li>';
+        var dist = units === 'km' ? (item.distanceKm != null ? item.distanceKm.toFixed(2) + ' km' : '—') : (item.distanceMi != null ? item.distanceMi + ' mi' : '—');
+        return '<li><span>' + (item.name || '') + '</span><span class="muted">' + dist + ' · ' + (item.status || '') + '</span></li>';
+      }).join('');
+    }
+    var SAMPLE_SERVICE_HISTORY = [
+      { date: '2026-03-01', title: 'Oil change', desc: 'Full synthetic oil change and filter replacement.', mileageMi: 12420, mileageKm: 19990 },
+      { date: '2026-02-15', title: 'Brake inspection', desc: 'Brake pads and rotors checked; front pads at 78%.', mileageMi: 12100, mileageKm: 19473 },
+      { date: '2026-01-20', title: 'Tire rotation', desc: 'Four-tire rotation and balance.', mileageMi: 11750, mileageKm: 18910 },
+      { date: '2025-12-10', title: 'Annual inspection', desc: 'State inspection passed; all systems within spec.', mileageMi: 11400, mileageKm: 18346 },
+      { date: '2025-11-05', title: 'Battery test', desc: 'Battery load test; replaced cabin air filter.', mileageMi: 11020, mileageKm: 17738 },
+      { date: '2025-09-18', title: 'Coolant flush', desc: 'Coolant system flush and refill.', mileageMi: 10580, mileageKm: 17027 }
+    ];
+    function updateServiceHistoryUI() {
+      var list = document.getElementById('serviceHistoryList');
+      if (!list) return;
+      var units = getProfileUnits();
+      var items = window._serviceHistory || SAMPLE_SERVICE_HISTORY;
+      list.innerHTML = items.map(function(s) {
+        var mi = s.mileageMi != null ? s.mileageMi.toLocaleString() + ' mi' : '';
+        var km = s.mileageKm != null ? s.mileageKm.toLocaleString() + ' km' : '';
+        var mileage = units === 'km' ? km : mi;
+        return '<li><span class="date">' + (s.date || '') + '</span><div><span class="title">' + (s.title || '') + '</span><p class="desc">' + (s.desc || '') + '</p>' + (mileage ? '<p class="mileage">' + mileage + '</p>' : '') + '</div></li>';
+      }).join('');
+    }
+
+    function updateMaintenanceAlertsUI() {
+      var alerts = window._maintenanceAlerts || [
+        { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule service in 60 days.', dueIn: '60 days', riskLevel: 'low' },
+        { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days.', dueIn: '30 days', riskLevel: 'low' },
+        { id: 3, severity: 'medium', message: 'Tire tread depth approaching minimum – consider replacement within 90 days.', dueIn: '90 days', riskLevel: 'medium' },
+        { id: 4, severity: 'low', message: 'Cabin air filter may need replacement at next service.', dueIn: '45 days', riskLevel: 'low' },
+        { id: 5, severity: 'info', message: 'Battery health good; next test at 18 months.', dueIn: '6 months', riskLevel: 'low' }
+      ];
+      var highCount = alerts.filter(function(a) { return (a.severity || a.riskLevel || '').toLowerCase() === 'high'; }).length;
+      var mediumCount = alerts.filter(function(a) { return (a.severity || a.riskLevel || '').toLowerCase() === 'medium'; }).length;
+      var lowCount = alerts.filter(function(a) { var s = (a.severity || a.riskLevel || 'info').toLowerCase(); return s === 'low' || s === 'info'; }).length;
+      var riskScore = Math.max(1, Math.min(10, 10 - lowCount * 1.2 - mediumCount * 0.5 + highCount * 2));
+      riskScore = Math.round(riskScore * 10) / 10;
+      var riskLevelLabel = riskScore >= 7 ? 'High' : riskScore >= 4 ? 'Medium' : 'Low';
+      var riskClass = riskScore >= 7 ? 'high' : riskScore >= 4 ? 'medium' : '';
+      var overview = document.getElementById('maintenanceRiskOverview');
+      if (overview) {
+        overview.innerHTML = '<div class="risk-kpi"><span class="value ' + riskClass + '">' + riskScore + '</span><span class="label">Risk score (1–10)</span></div>' +
+          '<div class="risk-kpi"><span class="value">' + riskLevelLabel + '</span><span class="label">Overall risk</span></div>' +
+          '<div class="risk-kpi"><span class="value">' + highCount + '</span><span class="label">High</span></div>' +
+          '<div class="risk-kpi"><span class="value">' + mediumCount + '</span><span class="label">Medium</span></div>' +
+          '<div class="risk-kpi"><span class="value">' + lowCount + '</span><span class="label">Low</span></div>';
+      }
+      var container = document.getElementById('maintenanceAlertsList');
+      if (!container) return;
+      container.innerHTML = alerts.map(function(a) {
+        var sev = (a.severity || 'info').toLowerCase();
+        var riskLevel = (a.riskLevel || sev).toLowerCase();
+        var riskBadge = riskLevel === 'high' || riskLevel === 'medium' ? '<span class="risk-badge ' + riskLevel + '">Risk: ' + riskLevel + '</span>' : '';
+        var due = a.dueIn ? '<span class="due">Due: ' + a.dueIn + '</span>' : '';
+        return '<div class="maintenance-alert ' + sev + '"><div class="alert-head"><span class="severity ' + sev + '">' + sev + '</span>' + riskBadge + due + '</div><p class="message">' + (a.message || '') + '</p></div>';
+      }).join('');
+    }
+
     async function loadData() {
       try {
         var data = {};
@@ -1197,14 +1444,32 @@
         let data = {};
         try { data = JSON.parse(text); } catch (_) {}
         const alerts = data.predictiveMaintenanceAlerts || [];
-        const list = document.getElementById('maintenanceAlerts');
-        if (list) list.innerHTML = alerts.length ? alerts.map(a => '<li>' + (a.message || '') + '</li>').join('') : '<li>No alerts</li>';
+        window._maintenanceAlerts = alerts.length ? alerts : [
+          { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule service in 60 days.', dueIn: '60 days', riskLevel: 'low' },
+          { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days.', dueIn: '30 days', riskLevel: 'low' },
+          { id: 3, severity: 'medium', message: 'Tire tread depth approaching minimum – consider replacement within 90 days.', dueIn: '90 days', riskLevel: 'medium' },
+          { id: 4, severity: 'low', message: 'Cabin air filter may need replacement at next service.', dueIn: '45 days', riskLevel: 'low' },
+          { id: 5, severity: 'info', message: 'Battery health good; next test at 18 months.', dueIn: '6 months', riskLevel: 'low' }
+        ];
+        updateMaintenanceAlertsUI();
         const items = data.recentActivity || [];
         const homeAct = document.getElementById('homeActivity');
         if (homeAct) homeAct.innerHTML = items.length ? items.map(a => '<li><span>' + (a.label || '') + '</span><span class="time">' + (a.time || '') + '</span></li>').join('') : '<li>No activity</li>';
         if (data.drivingReports) window._drivingReports = data.drivingReports;
         updateDrivingReportUI('weekly');
-      } catch (_) {}
+      } catch (_) {
+        window._maintenanceAlerts = [
+          { id: 1, severity: 'low', message: 'Brake pads at 76% – schedule service in 60 days.', dueIn: '60 days', riskLevel: 'low' },
+          { id: 2, severity: 'info', message: 'Next oil change recommended in 30 days.', dueIn: '30 days', riskLevel: 'low' },
+          { id: 3, severity: 'medium', message: 'Tire tread depth approaching minimum – consider replacement within 90 days.', dueIn: '90 days', riskLevel: 'medium' },
+          { id: 4, severity: 'low', message: 'Cabin air filter may need replacement at next service.', dueIn: '45 days', riskLevel: 'low' },
+          { id: 5, severity: 'info', message: 'Battery health good; next test at 18 months.', dueIn: '6 months', riskLevel: 'low' }
+        ];
+      }
+      updateMaintenanceAlertsUI();
+      updateServiceHistoryUI();
+      updateTripHistoryUI();
+      updateEvChargingUI();
       try {
         const r = await fetch(API + '/api/driver-companion');
         const text = await r.text();
@@ -1212,9 +1477,15 @@
         try { data = JSON.parse(text); } catch (_) {}
         if (document.getElementById('insuranceForecast')) document.getElementById('insuranceForecast').textContent = data.insuranceForecast?.estimatedPremiumChange || '—';
         if (document.getElementById('riskLevel')) document.getElementById('riskLevel').textContent = data.insuranceForecast?.riskLevel || '—';
-        if (document.getElementById('resaleValue')) document.getElementById('resaleValue').textContent = data.resaleEstimate?.value != null ? '$' + data.resaleEstimate.value.toLocaleString() : '—';
-        if (document.getElementById('resaleTrend')) document.getElementById('resaleTrend').textContent = data.resaleEstimate?.trend || '—';
-      } catch (_) {}
+        var resale = data.resaleEstimate || {};
+        if (document.getElementById('resaleValue')) document.getElementById('resaleValue').textContent = resale.value != null ? '$' + Number(resale.value).toLocaleString() : '$24,500';
+        if (document.getElementById('resaleTrend')) document.getElementById('resaleTrend').textContent = resale.trend || 'stable';
+        if (document.getElementById('resaleLastUpdated')) document.getElementById('resaleLastUpdated').textContent = resale.lastUpdated || '1 week ago';
+      } catch (_) {
+        if (document.getElementById('resaleValue')) document.getElementById('resaleValue').textContent = '$24,500';
+        if (document.getElementById('resaleTrend')) document.getElementById('resaleTrend').textContent = 'stable';
+        if (document.getElementById('resaleLastUpdated')) document.getElementById('resaleLastUpdated').textContent = '1 week ago';
+      }
     }
 
     document.getElementById('calcRiskBtn').onclick = async function() {
