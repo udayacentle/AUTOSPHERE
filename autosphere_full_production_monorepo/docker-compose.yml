@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: ./services/backend
+    ports:
+      - "3001:3000"
+    environment:
+      - PORT=3000
+      - AI_SERVICE_URL=http://ai:8000
+  ai:
+    build: ./ai-services/risk-engine
+    ports:
+      - "8000:8000"
